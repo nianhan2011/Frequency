@@ -1,18 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////////	 
-//  ÎÄ ¼ş Ãû   : main.c
-//  °æ ±¾ ºÅ   : v2.0
-//  ×÷    Õß   : luxban
-//  Éú³ÉÈÕÆÚ   : 2022-6-01
-//  ×î½üĞŞ¸Ä   : 
-//  ¹¦ÄÜÃèÊö   :ÑİÊ¾Àı³Ì(STM32F103ÏµÁĞ)
-//              ½Ó¿ÚËµÃ÷: 
+//  é”Ÿæ–¤æ‹· é”Ÿæ–¤æ‹· é”Ÿæ–¤æ‹·   : main.c
+//  é”Ÿæ–¤æ‹· é”Ÿæ–¤æ‹· é”Ÿæ–¤æ‹·   : v2.0
+//  é”Ÿæ–¤æ‹·    é”Ÿæ–¤æ‹·   : luxban
+//  é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·   : 2022-6-01
+//  é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·è–·é”Ÿï¿½   : 
+//  é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·   :é”Ÿæ–¤æ‹·ç¤ºé”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·(STM32F103ç³»é”Ÿæ–¤æ‹·)
+//              é”Ÿæ¥åŒ¡æ‹·è¯´é”Ÿæ–¤æ‹·: 
 //              LED:PA8
 //   
 //              TFT-LCD: 
-//              GND   µçÔ´µØ
-//              VCC   3.3vµçÔ´
-//              SCL   PB4£¨SCLK£©
-//              SDA   PB5£¨MOSI£©
+//              GND   é”Ÿæ–¤æ‹·æºé”Ÿæ–¤æ‹·
+//              VCC   3.3vé”Ÿæ–¤æ‹·æº
+//              SCL   PB4é”Ÿæ–¤æ‹·SCLKé”Ÿæ–¤æ‹·
+//              SDA   PB5é”Ÿæ–¤æ‹·MOSIé”Ÿæ–¤æ‹·
 //              RES   PB6
 //              DC    PB7
 //              CS    PB8
@@ -53,17 +53,19 @@ int main(void)
 {
     NVIC_Configuration();
 	delay_init();
-	LED_Init();//LED³õÊ¼»¯
+	LED_Init();//LEDé”Ÿæ–¤æ‹·å§‹é”Ÿæ–¤æ‹·
 	uart_init(9600);
 //    USART_4G_Init();
-	TIM3_Int_Init(5000-1,7200-1);//10KhzµÄ¼ÆÊıÆµÂÊ£¬¼ÆÊıµ½5000Îª500ms  
+	TIM3_Int_Init(5000-1,7200-1);//10Khzé”Ÿä¾¥ç¡·æ‹·é”Ÿæ–¤æ‹·é¢‘é”Ÿç»ï½æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·5000ä¸º500ms  
 
 
-//    os_cpu_interrupt_register(cpu_critical_control);
-//    os_task_init();
-//	os_create_task(OS_TASK1, ReceiveString, 1, OS_SLEEP);
-//	os_create_task(OS_TASK2, send_msg, 2, OS_SLEEP);
-//    os_start();
+
+
+   os_cpu_interrupt_register(cpu_critical_control);
+   os_task_init();
+   os_create_task(OS_TASK1, ReceiveString, 1, OS_SLEEP);
+   os_create_task(OS_TASK2, send_msg, 2, OS_SLEEP);
+   os_start();
 	while (1) {
 	
 	}

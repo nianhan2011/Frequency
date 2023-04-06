@@ -12,9 +12,9 @@ static void                   USART_4G_NVIC_Configuration          ( void );
 USART_4G_Fram USART_4G_Fram_Instance = {0};
 _Bool TCP_Is_Connect = false;
 /**
-  * @brief  ³õÊ¼»¯º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åˆå§‹åŒ–å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 void USART_4G_Init ( void )
 {
@@ -26,9 +26,9 @@ void USART_4G_Init ( void )
 
 
 /**
-  * @brief  ³õÊ¼»¯usartÓÃµ½µÄGPIOÒı½Å
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åˆå§‹åŒ–usartç”¨åˆ°çš„GPIOå¼•è„š
+  * @param  æ— 
+  * @retval æ— 
   */
 static void USART_GPIO_Config ( void )
 {
@@ -74,9 +74,9 @@ static void USART_4G_NVIC_Configuration ( void )
 
 }
 /**
-  * @brief  ³õÊ¼»¯ESP8266ÓÃµ½µÄ USART
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åˆå§‹åŒ–ESP8266ç”¨åˆ°çš„ USART
+  * @param  æ— 
+  * @retval æ— 
   */
 static void USART_USART_Config ( void )
 {
@@ -97,9 +97,9 @@ static void USART_USART_Config ( void )
 	USART_Init(USART_4G, &USART_InitStructure);
 	
 	
-	/* ÖĞ¶ÏÅäÖÃ */
-	USART_ITConfig ( USART_4G, USART_IT_RXNE, ENABLE ); //Ê¹ÄÜ´®¿Ú½ÓÊÕÖĞ¶Ï 
-	USART_ITConfig ( USART_4G, USART_IT_IDLE, ENABLE ); //Ê¹ÄÜ´®¿Ú×ÜÏß¿ÕÏĞÖĞ¶Ï 	
+	/* ä¸­æ–­é…ç½® */
+	USART_ITConfig ( USART_4G, USART_IT_RXNE, ENABLE ); //ä½¿èƒ½ä¸²å£æ¥æ”¶ä¸­æ–­ 
+	USART_ITConfig ( USART_4G, USART_IT_IDLE, ENABLE ); //ä½¿èƒ½ä¸²å£æ€»çº¿ç©ºé—²ä¸­æ–­ 	
 
 	USART_4G_NVIC_Configuration ();
 	
@@ -117,12 +117,12 @@ void USART_4G_IRQnHandler ( void )
 	{
 		ucCh  = USART_ReceiveData( USART_4G );
 		
-	 if ( USART_4G_Fram_Instance.InfBit.FramLength < ( RX2_4G_BUF_MAX_LEN - 2 ) )    		 //Ô¤Áô1¸ö×Ö½ÚĞ´½áÊø·û
+	 if ( USART_4G_Fram_Instance.InfBit.FramLength < ( RX2_4G_BUF_MAX_LEN - 2 ) )    		 //é¢„ç•™1ä¸ªå­—èŠ‚å†™ç»“æŸç¬¦
 		USART_4G_Fram_Instance.Data_RX_BUF [ USART_4G_Fram_Instance.InfBit.FramLength ++ ]  = ucCh;
 		
 	}
 	 	 
-	if ( USART_GetITStatus( USART_4G, USART_IT_IDLE ) == SET )                                         //Êı¾İÖ¡½ÓÊÕÍê±Ï
+	if ( USART_GetITStatus( USART_4G, USART_IT_IDLE ) == SET )                                         //æ•°æ®å¸§æ¥æ”¶å®Œæ¯•
 	{
        USART_4G_Fram_Instance.InfBit.FramFinishFlag = 1;
 		
@@ -135,21 +135,21 @@ void USART_4G_IRQnHandler ( void )
 
 
 /*
- * º¯ÊıÃû£ºWiFi_Cmd
- * ÃèÊö  £ºÄ£¿é·¢ËÍATÖ¸Áî
- * ÊäÈë  £ºcmd£¬´ı·¢ËÍµÄÖ¸Áî
- *         reply1£¬reply2£¬ÆÚ´ıµÄÏìÓ¦£¬ÎªNULL±í²»ĞèÏìÓ¦£¬Á½ÕßÎª»òÂß¼­¹ØÏµ
- *         waittime£¬µÈ´ıÏìÓ¦µÄÊ±¼ä
- * ·µ»Ø  : 1£¬Ö¸Áî·¢ËÍ³É¹¦
- *         0£¬Ö¸Áî·¢ËÍÊ§°Ü
- * µ÷ÓÃ  £º±»Íâ²¿µ÷ÓÃ
+ * å‡½æ•°åï¼šWiFi_Cmd
+ * æè¿°  ï¼šæ¨¡å—å‘é€ATæŒ‡ä»¤
+ * è¾“å…¥  ï¼šcmdï¼Œå¾…å‘é€çš„æŒ‡ä»¤
+ *         reply1ï¼Œreply2ï¼ŒæœŸå¾…çš„å“åº”ï¼Œä¸ºNULLè¡¨ä¸éœ€å“åº”ï¼Œä¸¤è€…ä¸ºæˆ–é€»è¾‘å…³ç³»
+ *         waittimeï¼Œç­‰å¾…å“åº”çš„æ—¶é—´
+ * è¿”å›  : 1ï¼ŒæŒ‡ä»¤å‘é€æˆåŠŸ
+ *         0ï¼ŒæŒ‡ä»¤å‘é€å¤±è´¥
+ * è°ƒç”¨  ï¼šè¢«å¤–éƒ¨è°ƒç”¨
  */
  bool ME_Cmd ( char * cmd, char * reply2, u32 waittime)
 {    
 	bool isVerify;
 	char *resultCMD = cmd;
 	char *resultRP = reply2;
-	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //´ÓĞÂ¿ªÊ¼½ÓÊÕĞÂµÄÊı¾İ°ü
+	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //ä»æ–°å¼€å§‹æ¥æ”¶æ–°çš„æ•°æ®åŒ…
 	USART_4G_Fram_Instance.InfBit.FramFinishFlag = 0;                             
 	memset((char *)USART_4G_Fram_Instance.Data_RX_BUF, 0, RX2_4G_BUF_MAX_LEN);
 //	USART_4G_Fram_Instance.Data_RX_BUF [USART_4G_Fram_Instance.InfBit.FramLength ]  = '\0';
@@ -159,12 +159,12 @@ void USART_4G_IRQnHandler ( void )
 
 
 	
-	delay_ms ( waittime );                 //ÑÓÊ±
+	delay_ms ( waittime );                 //å»¶æ—¶
 	
 	
 //	char red[200];
 //	strcpy(red, USART_4G_Fram_Instance.Data_RX_BUF);
-                             //Çå³ı½ÓÊÕ±êÖ¾
+                             //æ¸…é™¤æ¥æ”¶æ ‡å¿—
 //	if ( ( replay7 != 0 ) && ( reply2 != 0 ) )
 //		isVerify = ( ( bool ) strstr ( USART_4G_Fram_Instance.Data_RX_BUF, replay7 ) || 
 //						 ( bool ) strstr ( USART_4G_Fram_Instance.Data_RX_BUF, reply2 ) ); 
@@ -179,9 +179,9 @@ void USART_4G_IRQnHandler ( void )
 	} else {
 			isVerify = ( ( bool ) strstr ( (char *)USART_4G_Fram_Instance.Data_RX_BUF, resultRP ) );
 
-	}                      //²»ĞèÒª½ÓÊÕÊı¾İ
+	}                      //ä¸éœ€è¦æ¥æ”¶æ•°æ®
 	
-//	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //´ÓĞÂ¿ªÊ¼½ÓÊÕĞÂµÄÊı¾İ°ü
+//	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //ä»æ–°å¼€å§‹æ¥æ”¶æ–°çš„æ•°æ®åŒ…
 //	USART_4G_Fram_Instance.InfBit.FramFinishFlag = 0;                             
 ////	USART_4G_Fram_Instance.Data_RX_BUF [USART_4G_Fram_Instance.InfBit.FramLength ]  = '\0';
 //	memset(USART_4G_Fram_Instance.Data_RX_BUF, 0, RX2_4G_BUF_MAX_LEN);
@@ -194,17 +194,17 @@ void USART_4G_IRQnHandler ( void )
 bool ME_CmdWithTemp( char * cmd, char * reply1, char * reply2, u32 waittime, char *tempReceive)
 {    
 	bool isVerify;
-	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //´ÓĞÂ¿ªÊ¼½ÓÊÕĞÂµÄÊı¾İ°ü
+	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //ä»æ–°å¼€å§‹æ¥æ”¶æ–°çš„æ•°æ®åŒ…
 	USART_4G_Fram_Instance.InfBit.FramFinishFlag = 0;                             
 	memset((char *)USART_4G_Fram_Instance.Data_RX_BUF, 0, strlen((char *)USART_4G_Fram_Instance.Data_RX_BUF));
 
 	
 	WIFI_Usart ( "%s\r\n", cmd );
 
-	if ( ( reply1 == 0 ) && ( reply2 == 0 ) )                      //²»ĞèÒª½ÓÊÕÊı¾İ
+	if ( ( reply1 == 0 ) && ( reply2 == 0 ) )                      //ä¸éœ€è¦æ¥æ”¶æ•°æ®
 		return true;
 	
-	delay_ms ( waittime );                 //ÑÓÊ±
+	delay_ms ( waittime );                 //å»¶æ—¶
 	
 	if ( ( reply1 != 0 ) && ( reply2 != 0 ) )
 		isVerify = ( ( bool ) strstr ( (char *)USART_4G_Fram_Instance.Data_RX_BUF, reply1 ) || 
@@ -218,7 +218,7 @@ bool ME_CmdWithTemp( char * cmd, char * reply1, char * reply2, u32 waittime, cha
 	
 	memcpy(tempReceive, (char *)USART_4G_Fram_Instance.Data_RX_BUF, strlen((char *)USART_4G_Fram_Instance.Data_RX_BUF));
 //	tempReceive = strEsp8266_Fram_Record.Data_RX_BUF;
-	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //´ÓĞÂ¿ªÊ¼½ÓÊÕĞÂµÄÊı¾İ°ü
+	USART_4G_Fram_Instance.InfBit.FramLength = 0;               //ä»æ–°å¼€å§‹æ¥æ”¶æ–°çš„æ•°æ®åŒ…
 	USART_4G_Fram_Instance.InfBit.FramFinishFlag = 0;                             
 	memset((char *)USART_4G_Fram_Instance.Data_RX_BUF, 0, strlen((char *)USART_4G_Fram_Instance.Data_RX_BUF));
 	

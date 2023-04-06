@@ -10,28 +10,16 @@
     "files": [],
     "folders": [
       {
-        "name": "USER",
+        "name": "CORE",
         "files": [
           {
-            "path": "USER/main.c"
+            "path": "CORE/core_cm3.c"
           },
           {
-            "path": "USER/stm32f10x.h"
+            "path": "CORE/core_cm3.h"
           },
           {
-            "path": "USER/stm32f10x_conf.h"
-          },
-          {
-            "path": "USER/stm32f10x_it.c"
-          },
-          {
-            "path": "USER/stm32f10x_it.h"
-          },
-          {
-            "path": "USER/system_stm32f10x.c"
-          },
-          {
-            "path": "USER/system_stm32f10x.h"
+            "path": "CORE/startup_stm32f10x_hd.s"
           }
         ],
         "folders": []
@@ -119,48 +107,6 @@
           },
           {
             "path": "HARDWARE/GM331H_4G/bsp_4G.h"
-          }
-        ],
-        "folders": []
-      },
-      {
-        "name": "SYSTEM",
-        "files": [
-          {
-            "path": "SYSTEM/delay/delay.c"
-          },
-          {
-            "path": "SYSTEM/delay/delay.h"
-          },
-          {
-            "path": "SYSTEM/sys/sys.c"
-          },
-          {
-            "path": "SYSTEM/sys/sys.h"
-          },
-          {
-            "path": "SYSTEM/usart/usart.c"
-          },
-          {
-            "path": "SYSTEM/usart/usart.h"
-          },
-          {
-            "path": "SYSTEM/TIMER/timer.c"
-          },
-          {
-            "path": "SYSTEM/TIMER/timer.h"
-          },
-          {
-            "path": "SYSTEM/Common/Common.c"
-          },
-          {
-            "path": "SYSTEM/Common/Common.h"
-          },
-          {
-            "path": "SYSTEM/os_system/os_system.h"
-          },
-          {
-            "path": "SYSTEM/os_system/os_system.c"
           }
         ],
         "folders": []
@@ -310,16 +256,70 @@
         "folders": []
       },
       {
-        "name": "CORE",
+        "name": "SYSTEM",
         "files": [
           {
-            "path": "CORE/core_cm3.c"
+            "path": "SYSTEM/delay/delay.c"
           },
           {
-            "path": "CORE/core_cm3.h"
+            "path": "SYSTEM/delay/delay.h"
           },
           {
-            "path": "CORE/startup_stm32f10x_hd.s"
+            "path": "SYSTEM/sys/sys.c"
+          },
+          {
+            "path": "SYSTEM/sys/sys.h"
+          },
+          {
+            "path": "SYSTEM/usart/usart.c"
+          },
+          {
+            "path": "SYSTEM/usart/usart.h"
+          },
+          {
+            "path": "SYSTEM/TIMER/timer.c"
+          },
+          {
+            "path": "SYSTEM/TIMER/timer.h"
+          },
+          {
+            "path": "SYSTEM/Common/Common.c"
+          },
+          {
+            "path": "SYSTEM/Common/Common.h"
+          },
+          {
+            "path": "SYSTEM/os_system/os_system.h"
+          },
+          {
+            "path": "SYSTEM/os_system/os_system.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "USER",
+        "files": [
+          {
+            "path": "USER/main.c"
+          },
+          {
+            "path": "USER/stm32f10x.h"
+          },
+          {
+            "path": "USER/stm32f10x_conf.h"
+          },
+          {
+            "path": "USER/stm32f10x_it.c"
+          },
+          {
+            "path": "USER/stm32f10x_it.h"
+          },
+          {
+            "path": "USER/system_stm32f10x.c"
+          },
+          {
+            "path": "USER/system_stm32f10x.h"
           }
         ],
         "folders": []

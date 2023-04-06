@@ -118,7 +118,9 @@
                 "c:\\WorkCopy\\Frequency\\HARDWARE\\TimBase",
                 "c:\\WorkCopy\\Frequency\\HARDWARE\\GM331H_4G",
                 "c:\\WorkCopy\\Frequency\\SYSTEM\\Common",
-                "c:\\WorkCopy\\Frequency\\SYSTEM\\os_system"
+                "c:\\WorkCopy\\Frequency\\SYSTEM\\os_system",
+                "C:\\EmbeddedSysDev\\Keil\\ARM\\ARMCC\\include",
+                "C:\\EmbeddedSysDev\\Keil\\ARM\\ARMCC\\include\\rw"
             ],
             "defines": [
                 "STM32F10X_HD",
@@ -196,7 +198,8 @@
                 "__yield()=",
                 "__vfp_status(x,y)=0"
             ],
-            "intelliSenseMode": "${default}"
+            "intelliSenseMode": "${default}",
+            "configurationProvider": "cl.eide"
         }
     ],
     "version": 4

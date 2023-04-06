@@ -14,7 +14,7 @@
 #pragma anon_unions
 #endif
 
-/******************************** 4G Á¬½ÓÒı½Å¶¨Òå ***********************************/
+/******************************** 4G è¿æ¥å¼•è„šå®šä¹‰ ***********************************/
 #define      RCC_4G_GPIO_ClockCmd                             RCC_APB2PeriphClockCmd
 #define      RCC_4G_GPIO_Periph                               RCC_APB2Periph_GPIOA
 #define      PORT_4G_TX                                       GPIOA
@@ -37,9 +37,9 @@
 
 
 
-#define RX2_4G_BUF_MAX_LEN     100                          //×î´ó½ÓÊÕ»º´æ×Ö½ÚÊı
+#define RX2_4G_BUF_MAX_LEN     100                          //æœ€å¤§æ¥æ”¶ç¼“å­˜å­—èŠ‚æ•°
 
-typedef struct                                             //´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹¹Ìå
+typedef struct                                             //ä¸²å£æ•°æ®å¸§çš„å¤„ç†ç»“æ„ä½“
 {
 	 char Data_RX_BUF [ RX2_4G_BUF_MAX_LEN ];
 	
@@ -51,7 +51,7 @@ typedef struct                                             //´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹
 	
 } USART_4G_Fram;
 
-//typedef struct                                   //´®¿ÚÊı¾İÖ¡µÄ´¦Àí½á¹¹Ìå
+//typedef struct                                   //ä¸²å£æ•°æ®å¸§çš„å¤„ç†ç»“æ„ä½“
 //{
 //	int Pressure_Data;
 //	

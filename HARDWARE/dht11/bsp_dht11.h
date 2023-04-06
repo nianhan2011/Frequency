@@ -7,20 +7,20 @@
 
 
 
-/************************** DHT11 Êı¾İÀàĞÍ¶¨Òå********************************/
+/************************** DHT11 æ•°æ®ç±»å‹å®šä¹‰********************************/
 typedef struct
 {
-	uint8_t  humi_int;		//Êª¶ÈµÄÕûÊı²¿·Ö
-	uint8_t  humi_deci;	 	//Êª¶ÈµÄĞ¡Êı²¿·Ö
-	uint8_t  temp_int;	 	//ÎÂ¶ÈµÄÕûÊı²¿·Ö
-	uint8_t  temp_deci;	 	//ÎÂ¶ÈµÄĞ¡Êı²¿·Ö
-	uint8_t  check_sum;	 	//Ğ£ÑéºÍ
+	uint8_t  humi_int;		//æ¹¿åº¦çš„æ•´æ•°éƒ¨åˆ†
+	uint8_t  humi_deci;	 	//æ¹¿åº¦çš„å°æ•°éƒ¨åˆ†
+	uint8_t  temp_int;	 	//æ¸©åº¦çš„æ•´æ•°éƒ¨åˆ†
+	uint8_t  temp_deci;	 	//æ¸©åº¦çš„å°æ•°éƒ¨åˆ†
+	uint8_t  check_sum;	 	//æ ¡éªŒå’Œ
 		                 
 } DHT11_Data_TypeDef;
 
 
 
-/************************** DHT11 Á¬½ÓÒı½Å¶¨Òå********************************/
+/************************** DHT11 è¿æ¥å¼•è„šå®šä¹‰********************************/
 #define      DHT11_Dout_SCK_APBxClock_FUN              RCC_APB2PeriphClockCmd
 #define      DHT11_Dout_GPIO_CLK                       RCC_APB2Periph_GPIOC
 
@@ -29,7 +29,7 @@ typedef struct
 
 
 
-/************************** DHT11 º¯Êıºê¶¨Òå********************************/
+/************************** DHT11 å‡½æ•°å®å®šä¹‰********************************/
 #define      DHT11_Dout_0	                            GPIO_ResetBits ( DHT11_Dout_GPIO_PORT, DHT11_Dout_GPIO_PIN ) 
 #define      DHT11_Dout_1	                            GPIO_SetBits ( DHT11_Dout_GPIO_PORT, DHT11_Dout_GPIO_PIN ) 
 
@@ -37,7 +37,7 @@ typedef struct
 
 
 
-/************************** DHT11 º¯ÊıÉùÃ÷ ********************************/
+/************************** DHT11 å‡½æ•°å£°æ˜ ********************************/
 void                     DHT11_Init                      ( void );
 uint8_t                  DHT11_Read_TempAndHumidity      ( DHT11_Data_TypeDef * DHT11_Data );
 extern DHT11_Data_TypeDef DHT11_Data;
