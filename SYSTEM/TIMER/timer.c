@@ -58,16 +58,10 @@ void TIM3_IRQHandler(void)   //TIM3中断
 	if (TIM_GetITStatus(TIM3, TIM_IT_Update) != RESET) //检查指定的TIM中断发生与否:TIM 中断源 
 		{
 			
-			PAout(8) = !PAout(8);
+			PAout(1) = !PAout(1);
 			
 			
-//			if (ReceiveMSG_Flag.Time_CNT == 2) {
-//				ReceiveMSG_Flag.Time_CNT = 0;
-//				ReceiveMSG_Flag.Finish_Flag = 1;
-//			}
-//			ReceiveMSG_Flag.Time_CNT ++;
-			
-			os_clock_interrupt_handle();
+//			os_clock_interrupt_handle();
 
 			TIM_ClearITPendingBit(TIM3, TIM_IT_Update  );  //清除TIMx的中断待处理位:TIM 中断源 
 		}
