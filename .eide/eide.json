@@ -1,0 +1,499 @@
+{
+  "name": "AIRoom",
+  "type": "ARM",
+  "dependenceList": [],
+  "srcDirs": [
+    ".eide/deps"
+  ],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "USER",
+        "files": [
+          {
+            "path": "USER/main.c"
+          },
+          {
+            "path": "USER/stm32f10x.h"
+          },
+          {
+            "path": "USER/stm32f10x_conf.h"
+          },
+          {
+            "path": "USER/stm32f10x_it.c"
+          },
+          {
+            "path": "USER/stm32f10x_it.h"
+          },
+          {
+            "path": "USER/system_stm32f10x.c"
+          },
+          {
+            "path": "USER/system_stm32f10x.h"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "HARDWARE",
+        "files": [
+          {
+            "path": "HARDWARE/LCD/lcd.c"
+          },
+          {
+            "path": "HARDWARE/LCD/lcd.h"
+          },
+          {
+            "path": "HARDWARE/LCD/lcd_init.c"
+          },
+          {
+            "path": "HARDWARE/LCD/lcd_init.h"
+          },
+          {
+            "path": "HARDWARE/LCD/lcdfont.h"
+          },
+          {
+            "path": "HARDWARE/LCD/pic.h"
+          },
+          {
+            "path": "HARDWARE/LED/led.c"
+          },
+          {
+            "path": "HARDWARE/LED/led.h"
+          },
+          {
+            "path": "HARDWARE/dht11/bsp_dht11.c"
+          },
+          {
+            "path": "HARDWARE/dht11/bsp_dht11.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/Internet/dhcp.c"
+          },
+          {
+            "path": "HARDWARE/Ethernet/Internet/dhcp.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/Internet/tcp_demo.c"
+          },
+          {
+            "path": "HARDWARE/Ethernet/Internet/tcp_demo.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/socket.c"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/socket.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/types.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/utility.c"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/utility.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/w5500.c"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/w5500.h"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/w5500_conf.c"
+          },
+          {
+            "path": "HARDWARE/Ethernet/W5500/w5500_conf.h"
+          },
+          {
+            "path": "HARDWARE/TimBase/bsp_TiMbase.c"
+          },
+          {
+            "path": "HARDWARE/TimBase/bsp_TiMbase.h"
+          },
+          {
+            "path": "HARDWARE/GM331H_4G/bsp_4G.c"
+          },
+          {
+            "path": "HARDWARE/GM331H_4G/bsp_4G.h"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "SYSTEM",
+        "files": [
+          {
+            "path": "SYSTEM/delay/delay.c"
+          },
+          {
+            "path": "SYSTEM/delay/delay.h"
+          },
+          {
+            "path": "SYSTEM/sys/sys.c"
+          },
+          {
+            "path": "SYSTEM/sys/sys.h"
+          },
+          {
+            "path": "SYSTEM/usart/usart.c"
+          },
+          {
+            "path": "SYSTEM/usart/usart.h"
+          },
+          {
+            "path": "SYSTEM/TIMER/timer.c"
+          },
+          {
+            "path": "SYSTEM/TIMER/timer.h"
+          },
+          {
+            "path": "SYSTEM/Common/Common.c"
+          },
+          {
+            "path": "SYSTEM/Common/Common.h"
+          },
+          {
+            "path": "SYSTEM/os_system/os_system.h"
+          },
+          {
+            "path": "SYSTEM/os_system/os_system.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "STM32F10x_FWLib",
+        "files": [
+          {
+            "path": "STM32F10x_FWLib/src/misc.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_adc.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_bkp.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_can.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_cec.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_crc.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_dac.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_dbgmcu.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_dma.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_exti.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_flash.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_fsmc.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_gpio.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_i2c.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_iwdg.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_pwr.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_rcc.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_rtc.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_sdio.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_spi.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_tim.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_usart.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/src/stm32f10x_wwdg.c"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/misc.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_adc.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_bkp.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_can.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_cec.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_crc.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_dac.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_dbgmcu.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_dma.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_exti.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_flash.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_fsmc.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_gpio.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_i2c.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_iwdg.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_pwr.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_rcc.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_rtc.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_sdio.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_spi.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_tim.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_usart.h"
+          },
+          {
+            "path": "STM32F10x_FWLib/inc/stm32f10x_wwdg.h"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "CORE",
+        "files": [
+          {
+            "path": "CORE/core_cm3.c"
+          },
+          {
+            "path": "CORE/core_cm3.h"
+          },
+          {
+            "path": "CORE/startup_stm32f10x_hd.s"
+          }
+        ],
+        "folders": []
+      }
+    ]
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "4cc9479d01447d152d8510f70d0226c6"
+  },
+  "targets": {
+    "Target 1": {
+      "excludeList": [],
+      "toolchain": "AC5",
+      "compileConfig": {
+        "cpuType": "Cortex-M3",
+        "floatingPointHardware": "none",
+        "scatterFilePath": "",
+        "useCustomScatterFile": false,
+        "storageLayout": {
+          "RAM": [
+            {
+              "tag": "RAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x20000000",
+                "size": "0xc000"
+              },
+              "isChecked": true,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            }
+          ],
+          "ROM": [
+            {
+              "tag": "ROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "IROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x8000000",
+                "size": "0x40000"
+              },
+              "isChecked": true,
+              "isStartup": true
+            },
+            {
+              "tag": "IROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            }
+          ]
+        },
+        "options": "null"
+      },
+      "uploader": "JLink",
+      "uploadConfig": {
+        "bin": "",
+        "baseAddr": "",
+        "cpuInfo": {
+          "vendor": "null",
+          "cpuName": "null"
+        },
+        "proType": 1,
+        "speed": 8000,
+        "otherCmds": ""
+      },
+      "uploadConfigMap": {},
+      "custom_dep": {
+        "name": "default",
+        "incList": [
+          "CORE",
+          "HARDWARE/LCD",
+          "HARDWARE/LED",
+          "STM32F10x_FWLib/inc",
+          "SYSTEM/delay",
+          "SYSTEM/sys",
+          "SYSTEM/usart",
+          "USER",
+          "HARDWARE/dht11",
+          "SYSTEM/TIMER",
+          "STM32F10x_FWLib/src",
+          "HARDWARE/Ethernet/Internet",
+          "HARDWARE/Ethernet/W5500",
+          "HARDWARE/TimBase",
+          "HARDWARE/GM331H_4G",
+          "SYSTEM/Common",
+          "SYSTEM/os_system",
+          ".cmsis/include",
+          "RTE/_Target 1",
+          ".eide/deps"
+        ],
+        "libList": [],
+        "sourceDirList": [],
+        "defineList": [
+          "STM32F10X_HD",
+          "USE_STDPERIPH_DRIVER"
+        ]
+      }
+    }
+  },
+  "version": "3.3"
+}
