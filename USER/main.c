@@ -55,5 +55,8 @@ int main(void)
 //    os_create_task(OS_TASK2, send_msg, 2, OS_SLEEP);
 //    os_start();
     while (1) {
+        USART_3_PRINT("hahahhaha");
+		
+		
     }
 }
