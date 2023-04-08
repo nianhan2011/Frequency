@@ -10,6 +10,7 @@
 /bin
 /Objects/*
 /out
+/Listings/*
 
 # eide template
 *.ept
