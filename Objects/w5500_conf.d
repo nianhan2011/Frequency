@@ -30,4 +30,4 @@
 .\objects\w5500_conf.o: .\HARDWARE\Ethernet\Internet\dhcp.h
 .\objects\w5500_conf.o: .\HARDWARE\TimBase\bsp_TiMbase.h
 .\objects\w5500_conf.o: .\SYSTEM\delay\delay.h
-.\objects\w5500_conf.o: .\SYSTEM\sys\sys.h
+.\objects\w5500_conf.o: .\SYSTEM\Common\common.h

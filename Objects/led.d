@@ -1,6 +1,6 @@
 .\objects\led.o: HARDWARE\LED\led.c
 .\objects\led.o: HARDWARE\LED\led.h
-.\objects\led.o: .\SYSTEM\sys\sys.h
+.\objects\led.o: .\SYSTEM\Common\common.h
 .\objects\led.o: .\USER\stm32f10x.h
 .\objects\led.o: .\CORE\core_cm3.h
 .\objects\led.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdint.h

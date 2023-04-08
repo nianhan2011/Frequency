@@ -1,6 +1,7 @@
 .\objects\main.o: USER\main.c
 .\objects\main.o: .\SYSTEM\delay\delay.h
-.\objects\main.o: .\SYSTEM\sys\sys.h
+.\objects\main.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: .\SYSTEM\Common\common.h
 .\objects\main.o: .\USER\stm32f10x.h
 .\objects\main.o: .\CORE\core_cm3.h
 .\objects\main.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdint.h
@@ -28,7 +29,6 @@
 .\objects\main.o: .\HARDWARE\LCD\lcd.h
 .\objects\main.o: .\HARDWARE\LCD\pic.h
 .\objects\main.o: .\SYSTEM\usart\usart.h
-.\objects\main.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\main.o: .\HARDWARE\dht11\bsp_dht11.h
 .\objects\main.o: .\SYSTEM\TIMER\timer.h
 .\objects\main.o: .\HARDWARE\Ethernet\Internet\tcp_demo.h
@@ -38,6 +38,4 @@
 .\objects\main.o: .\HARDWARE\Ethernet\W5500\socket.h
 .\objects\main.o: .\HARDWARE\Ethernet\W5500\utility.h
 .\objects\main.o: .\HARDWARE\GM331H_4G\bsp_4G.h
-.\objects\main.o: .\SYSTEM\Common\common.h
-.\objects\main.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdbool.h
 .\objects\main.o: .\SYSTEM\os_system\os_system.h

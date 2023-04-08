@@ -1,6 +1,6 @@
 .\objects\lcd_init.o: HARDWARE\LCD\lcd_init.c
 .\objects\lcd_init.o: HARDWARE\LCD\lcd_init.h
-.\objects\lcd_init.o: .\SYSTEM\sys\sys.h
+.\objects\lcd_init.o: .\SYSTEM\Common\common.h
 .\objects\lcd_init.o: .\USER\stm32f10x.h
 .\objects\lcd_init.o: .\CORE\core_cm3.h
 .\objects\lcd_init.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdint.h
@@ -24,3 +24,4 @@
 .\objects\lcd_init.o: .\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\lcd_init.o: .\STM32F10x_FWLib\inc\misc.h
 .\objects\lcd_init.o: .\SYSTEM\delay\delay.h
+.\objects\lcd_init.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdio.h

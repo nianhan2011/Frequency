@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system</IncludePath>
+              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -555,6 +555,26 @@
               <FileType>5</FileType>
               <FilePath>.\HARDWARE\GM331H_4G\bsp_4G.h</FilePath>
             </File>
+            <File>
+              <FileName>sk_hmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\samkoon\sk_hmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>sk_hmi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\HARDWARE\samkoon\sk_hmi.h</FilePath>
+            </File>
+            <File>
+              <FileName>usart3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\samkoon\usart3.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart3.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\HARDWARE\samkoon\usart3.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -569,16 +589,6 @@
               <FileName>delay.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\SYSTEM\delay\delay.h</FilePath>
-            </File>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\SYSTEM\sys\sys.c</FilePath>
-            </File>
-            <File>
-              <FileName>sys.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\SYSTEM\sys\sys.h</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>

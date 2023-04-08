@@ -7,17 +7,16 @@
 static char *                 itoa                                ( int value, char * string, int radix );
 
 
-
 /*
- * º¯ÊıÃû£ºUSART2_printf
- * ÃèÊö  £º¸ñÊ½»¯Êä³ö£¬ÀàËÆÓÚC¿âÖĞµÄprintf£¬µ«ÕâÀïÃ»ÓĞÓÃµ½C¿â
- * ÊäÈë  £º-USARTx ´®¿ÚÍ¨µÀ£¬ÕâÀïÖ»ÓÃµ½ÁË´®¿Ú2£¬¼´USART2
- *		     -Data   Òª·¢ËÍµ½´®¿ÚµÄÄÚÈİµÄÖ¸Õë
- *			   -...    ÆäËû²ÎÊı
- * Êä³ö  £ºÎŞ
- * ·µ»Ø  £ºÎŞ 
- * µ÷ÓÃ  £ºÍâ²¿µ÷ÓÃ
- *         µäĞÍÓ¦ÓÃUSART2_printf( USART2, "\r\n this is a demo \r\n" );
+ * å‡½æ•°åï¼šUSART2_printf
+ * æè¿°  ï¼šæ ¼å¼åŒ–è¾“å‡ºï¼Œç±»ä¼¼äºCåº“ä¸­çš„printfï¼Œä½†è¿™é‡Œæ²¡æœ‰ç”¨åˆ°Cåº“
+ * è¾“å…¥  ï¼š-USARTx ä¸²å£é€šé“ï¼Œè¿™é‡Œåªç”¨åˆ°äº†ä¸²å£2ï¼Œå³USART2
+ *		     -Data   è¦å‘é€åˆ°ä¸²å£çš„å†…å®¹çš„æŒ‡é’ˆ
+ *			   -...    å…¶ä»–å‚æ•°
+ * è¾“å‡º  ï¼šæ— 
+ * è¿”å›  ï¼šæ—  
+ * è°ƒç”¨  ï¼šå¤–éƒ¨è°ƒç”¨
+ *         å…¸å‹åº”ç”¨USART2_printf( USART2, "\r\n this is a demo \r\n" );
  *            		 USART2_printf( USART2, "\r\n %d \r\n", i );
  *            		 USART2_printf( USART2, "\r\n %s \r\n", j );
  */
@@ -31,18 +30,18 @@ void USART_printf ( USART_TypeDef * USARTx, char * Data, ... )
 	va_list ap;
 	va_start(ap, Data);
 
-	while ( * Data != 0 )     // ÅĞ¶ÏÊÇ·ñµ½´ï×Ö·û´®½áÊø·û
+	while ( * Data != 0 )     // åˆ¤æ–­æ˜¯å¦åˆ°è¾¾å­—ç¬¦ä¸²ç»“æŸç¬¦
 	{				                          
 		if ( * Data == 0x5c )  //'\'
 		{									  
 			switch ( *++Data )
 			{
-				case 'r':							          //»Ø³µ·û
+				case 'r':							          //å›è½¦ç¬¦
 				USART_SendData(USARTx, 0x0d);
 				Data ++;
 				break;
 
-				case 'n':							          //»»ĞĞ·û
+				case 'n':							          //æ¢è¡Œç¬¦
 				USART_SendData(USARTx, 0x0a);	
 				Data ++;
 				break;
@@ -57,7 +56,7 @@ void USART_printf ( USART_TypeDef * USARTx, char * Data, ... )
 		{									  //
 			switch ( *++Data )
 			{				
-				case 's':										  //×Ö·û´®
+				case 's':										  //å­—ç¬¦ä¸²
 				s = va_arg(ap, const char *);
 				
 				for ( ; *s; s++) 
@@ -71,7 +70,7 @@ void USART_printf ( USART_TypeDef * USARTx, char * Data, ... )
 				break;
 
 				case 'd':			
-					//Ê®½øÖÆ
+					//åè¿›åˆ¶
 				d = va_arg(ap, int);
 				
 				itoa(d, buf, 10);
@@ -103,15 +102,15 @@ void USART_printf ( USART_TypeDef * USARTx, char * Data, ... )
 
 
 /*
- * º¯ÊıÃû£ºitoa
- * ÃèÊö  £º½«ÕûĞÎÊı¾İ×ª»»³É×Ö·û´®
- * ÊäÈë  £º-radix =10 ±íÊ¾10½øÖÆ£¬ÆäËû½á¹ûÎª0
- *         -value Òª×ª»»µÄÕûĞÎÊı
- *         -buf ×ª»»ºóµÄ×Ö·û´®
+ * å‡½æ•°åï¼šitoa
+ * æè¿°  ï¼šå°†æ•´å½¢æ•°æ®è½¬æ¢æˆå­—ç¬¦ä¸²
+ * è¾“å…¥  ï¼š-radix =10 è¡¨ç¤º10è¿›åˆ¶ï¼Œå…¶ä»–ç»“æœä¸º0
+ *         -value è¦è½¬æ¢çš„æ•´å½¢æ•°
+ *         -buf è½¬æ¢åçš„å­—ç¬¦ä¸²
  *         -radix = 10
- * Êä³ö  £ºÎŞ
- * ·µ»Ø  £ºÎŞ
- * µ÷ÓÃ  £º±»USART2_printf()µ÷ÓÃ
+ * è¾“å‡º  ï¼šæ— 
+ * è¿”å›  ï¼šæ— 
+ * è°ƒç”¨  ï¼šè¢«USART2_printf()è°ƒç”¨
  */
 static char * itoa( int value, char *string, int radix )
 {

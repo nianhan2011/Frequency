@@ -1,6 +1,6 @@
 .\objects\timer.o: SYSTEM\TIMER\timer.c
 .\objects\timer.o: SYSTEM\TIMER\timer.h
-.\objects\timer.o: .\SYSTEM\sys\sys.h
+.\objects\timer.o: .\SYSTEM\Common\common.h
 .\objects\timer.o: .\USER\stm32f10x.h
 .\objects\timer.o: .\CORE\core_cm3.h
 .\objects\timer.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdint.h

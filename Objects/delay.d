@@ -1,6 +1,7 @@
 .\objects\delay.o: SYSTEM\delay\delay.c
 .\objects\delay.o: SYSTEM\delay\delay.h
-.\objects\delay.o: .\SYSTEM\sys\sys.h
+.\objects\delay.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\delay.o: .\SYSTEM\Common\common.h
 .\objects\delay.o: .\USER\stm32f10x.h
 .\objects\delay.o: .\CORE\core_cm3.h
 .\objects\delay.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdint.h

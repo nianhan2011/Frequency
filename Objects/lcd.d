@@ -1,6 +1,6 @@
 .\objects\lcd.o: HARDWARE\LCD\lcd.c
 .\objects\lcd.o: HARDWARE\LCD\lcd.h
-.\objects\lcd.o: .\SYSTEM\sys\sys.h
+.\objects\lcd.o: .\SYSTEM\Common\common.h
 .\objects\lcd.o: .\USER\stm32f10x.h
 .\objects\lcd.o: .\CORE\core_cm3.h
 .\objects\lcd.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdint.h
@@ -26,3 +26,4 @@
 .\objects\lcd.o: HARDWARE\LCD\lcd_init.h
 .\objects\lcd.o: HARDWARE\LCD\lcdfont.h
 .\objects\lcd.o: .\SYSTEM\delay\delay.h
+.\objects\lcd.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdio.h

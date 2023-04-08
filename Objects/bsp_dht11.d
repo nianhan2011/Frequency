@@ -23,4 +23,5 @@
 .\objects\bsp_dht11.o: .\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\bsp_dht11.o: .\STM32F10x_FWLib\inc\misc.h
 .\objects\bsp_dht11.o: .\SYSTEM\delay\delay.h
-.\objects\bsp_dht11.o: .\SYSTEM\sys\sys.h
+.\objects\bsp_dht11.o: C:\EmbeddedSysDev\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\bsp_dht11.o: .\SYSTEM\Common\common.h
