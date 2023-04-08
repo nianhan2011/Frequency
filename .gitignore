@@ -12,6 +12,11 @@
 /out
 /Listings/*
 
+*.uvguix.*
+*.uvoptx
+*.code-workspace
+
+
 # eide template
 *.ept
 *.eide-template
