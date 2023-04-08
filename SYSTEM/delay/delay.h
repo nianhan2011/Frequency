@@ -1,27 +1,20 @@
-#ifndef __USART_H
-#define __USART_H
+#ifndef __DELAY_H
+#define __DELAY_H
 #include "stdio.h"	
 #include "common.h" 
+//当使用ucos的时候,此函数会初始化ucos的时钟节拍
+//SYSTICK的时钟固定为HCLK时钟的1/8
+//SYSCLK:系统时钟
+void delay_init(void);						    
 
-#define USART_REC_LEN  			200  	//定义最大接收字节数 200
-#define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
-	  	
-extern u8  USART_RX_BUF[USART_REC_LEN]; //接收缓冲,最大USART_REC_LEN个字节.末字节为换行符 
-extern u16 USART_RX_STA;         		//接收状态标记	
-//如果想串口中断接收，请不要注释以下宏定义
-void uart_init(u32 bound);
+//延时nus
+//nus为要延时的us数.		    								   
+void delay_us(u32 nus);
+//延时nms
+//nms:要延时的ms数
+void delay_ms(u16 nms);
+
 #endif
-
-
-
-
-
-
-
-
-
-
-
 
 
 

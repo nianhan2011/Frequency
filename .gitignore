@@ -1,13 +1,14 @@
 # dot files
 /.vscode/launch.json
-/.settings
-/.eide/log
+/.vscode/*
+/.settings/*
+/.eide/*
 /.eide.usr.ctx.json
 
 # project out
 /build
 /bin
-/Objects
+/Objects/*
 /out
 
 # eide template
