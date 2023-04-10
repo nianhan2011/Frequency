@@ -9,16 +9,34 @@ static void USART_GPIO_Config(void);
 static void USART_USART_Config(void);
 static void USART_4G_NVIC_Configuration(void);
 
-USART_Fram usart3_fram = {0};
+// Queqe256 usart3_fram;
+USART_Fram usart3_fram;
+
 /**
  * @brief  初始化函数
  * @param  无
  * @retval 无
  */
+u8 test333[10] = {0x01, 0x01, 0, 0, 0, 0x18, 0x3C, 0x00};
+
+void clearFrame(void)
+{
+    usart3_fram.InfBit.FramLength = 0;
+    usart3_fram.InfBit.ReadLength = 0;
+    usart3_fram.InfBit.FramFinishFlag = 0;
+    memset((char *)usart3_fram.Data_RX_BUF, 0, strlen((char *)usart3_fram.Data_RX_BUF));
+
+    // 01 01 00 00 00 18 3C 00
+    // memcpy(usart3_fram.Data_RX_BUF, test333, 8);
+    // usart3_fram.InfBit.FramLength = 8;
+}
+
 void usart3_init(void)
 {
+    // usart3_fram.is_interrupt = ENABLE;
+    // QUEUE_INIT(usart3_fram);
+    clearFrame();
     USART_GPIO_Config();
-
     USART_USART_Config();
 }
 
@@ -37,13 +55,13 @@ static void USART_GPIO_Config(void)
 
     /* USART GPIO config */
     /* Configure USART Tx as alternate function push-pull */
-    GPIO_InitStructure.GPIO_Pin   = PIN_USART3_TX;
-    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF_PP;
+    GPIO_InitStructure.GPIO_Pin = PIN_USART3_TX;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(PORT_USART3_TX, &GPIO_InitStructure);
 
     /* Configure USART Rx as input floating */
-    GPIO_InitStructure.GPIO_Pin  = PIN_USART3_RX;
+    GPIO_InitStructure.GPIO_Pin = PIN_USART3_RX;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_Init(PORT_USART3_RX, &GPIO_InitStructure);
 }
@@ -53,10 +71,10 @@ static void USART_4G_NVIC_Configuration(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     /* Enable the USART_3 Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel                   = USART_3_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannel = USART_3_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 2;
-    NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
 }
 /**
@@ -73,12 +91,12 @@ static void USART_USART_Config(void)
     USART_InitTypeDef USART_InitStructure;
 
     /* USART1 mode config */
-    USART_InitStructure.USART_BaudRate            = USART_BAUD_RATE;
-    USART_InitStructure.USART_WordLength          = USART_WordLength_8b;
-    USART_InitStructure.USART_StopBits            = USART_StopBits_1;
-    USART_InitStructure.USART_Parity              = USART_Parity_No;
+    USART_InitStructure.USART_BaudRate = USART_BAUD_RATE;
+    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+    USART_InitStructure.USART_StopBits = USART_StopBits_1;
+    USART_InitStructure.USART_Parity = USART_Parity_No;
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode                = USART_Mode_Rx | USART_Mode_Tx;
+    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_Init(USART_3, &USART_InitStructure);
 
     /* 中断配置 */
@@ -94,8 +112,11 @@ void USART_3_IRQnHandler(void)
 {
     uint8_t ucCh;
 
-    if (USART_GetITStatus(USART_3, USART_IT_RXNE) != RESET) {
+    if (USART_GetITStatus(USART_3, USART_IT_RXNE) != RESET)
+    {
         ucCh = USART_ReceiveData(USART_3);
+
+        // QUEUE_IN(usart3_fram, &ucCh, 1);
 
         if (usart3_fram.InfBit.FramLength < (RX_BUF_MAX_LEN - 2)) // 预留1个字节写结束符
             usart3_fram.Data_RX_BUF[usart3_fram.InfBit.FramLength++] = ucCh;

@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon</IncludePath>
+              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon;.\SYSTEM\queue;.\HARDWARE\key</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -566,6 +566,16 @@
               <FilePath>.\HARDWARE\samkoon\sk_hmi.h</FilePath>
             </File>
             <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\key\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\HARDWARE\key\key.h</FilePath>
+            </File>
+            <File>
               <FileName>usart3.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\HARDWARE\samkoon\usart3.c</FilePath>
@@ -621,6 +631,11 @@
               <FilePath>.\SYSTEM\Common\Common.h</FilePath>
             </File>
             <File>
+              <FileName>usart3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\samkoon\usart3.c</FilePath>
+            </File>
+            <File>
               <FileName>os_system.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\SYSTEM\os_system\os_system.h</FilePath>
@@ -629,6 +644,16 @@
               <FileName>os_system.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\SYSTEM\os_system\os_system.c</FilePath>
+            </File>
+            <File>
+              <FileName>queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SYSTEM\queue\queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SYSTEM\queue\queue.h</FilePath>
             </File>
           </Files>
         </Group>
