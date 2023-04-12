@@ -631,11 +631,6 @@
               <FilePath>.\SYSTEM\Common\Common.h</FilePath>
             </File>
             <File>
-              <FileName>usart3.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\HARDWARE\samkoon\usart3.c</FilePath>
-            </File>
-            <File>
               <FileName>os_system.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\SYSTEM\os_system\os_system.h</FilePath>

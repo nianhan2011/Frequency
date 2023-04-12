@@ -47,9 +47,10 @@
 // #define USART_3_IRQn USART2_IRQn
 // #define USART_3_IRQnHandler USART2_IRQHandler
 
-// #define USART_3_PRINT(fmt, ...) USART_printf(USART_2, fmt, ##__VA_ARGS__)
+// #define USART_3_PRINT(fmt, ...) USART_printf(USART_3, fmt, ##__VA_ARGS__)
 
 extern USART_Fram usart3_fram;
 void usart3_init(void);
 void clearFrame(void);
+void usart3_send_array(uint8_t *array, uint8_t num);
 #endif

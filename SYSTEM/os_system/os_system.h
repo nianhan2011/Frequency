@@ -4,6 +4,7 @@
 typedef enum
 {
     OS_TASK1,
+    OS_TASK2,
     OS_TASK_SUM
 } OS_TaskID;
 

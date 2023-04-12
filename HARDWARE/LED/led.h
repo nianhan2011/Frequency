@@ -3,15 +3,9 @@
 
 #include "common.h"
 
-
-
-#define LED PAout(8)	// PA8
+#define LED PAout(8) // PA8
 
 void LED_Init(void);
-
+void led_turn(void);
 
 #endif
-
-
-
-

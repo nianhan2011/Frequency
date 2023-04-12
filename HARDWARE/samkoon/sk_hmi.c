@@ -154,6 +154,116 @@ uint16_t getCoilVal(uint16_t addr, uint16_t *tempData) // ȡ��Ȧ״̬ ���
 
     return result;
 }
+
+uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ����0��ʾ�ɹ�
+{
+    int result = 0;
+    uint16_t tempAddr;
+
+    tempAddr = addr & 0xfff;
+
+    switch (tempAddr & 0xff)
+    {
+    case 1:
+        *tempData = 1; // ��ѹֵ
+        break;
+    case 2:
+        *tempData = 2; // ��ѹֵ
+        break;
+    case 3:
+        *tempData = 3; // COOL1
+        break;
+    case 4:
+        *tempData = 4; // HEAT1
+        break;
+    case 5:
+        *tempData = 5; // COOL2
+        break;
+    case 6:
+        *tempData = 6; // HEAT2
+        break;
+    case 7:
+        *tempData = 7; // ��ˮWATER
+        break;
+    case 8:
+        *tempData = 8; // HIGH
+        break;
+    case 9:
+        *tempData = 9; // �����¶�
+        break;
+    case 10:
+        *tempData = 10; // ����1
+        break;
+
+    case 11:
+        *tempData = 11; // ����2
+        break;
+
+    case 12:
+        *tempData = 12; // ����3
+        break;
+
+    case 13:
+        *tempData = 13; // WATER
+        break;
+    case 14:
+        *tempData = 14; // HIGH
+        break;
+    case 15:
+        *tempData = 15; // HEAT1
+        break;
+    case 16:
+        *tempData = 16; // HEAT2
+        break;
+
+    case 17:
+        *tempData = 17; // HEAT2
+        break;
+
+    case 18:
+        *tempData = 18; // ����2
+        break;
+
+    case 19:
+
+        *tempData = 19;
+
+        break;
+
+    case 20:
+
+        *tempData = 20;
+        break;
+
+    case 21:
+        *tempData = 21;
+        break;
+
+    case 22:
+        *tempData = 22; // ��ˮWATER
+        break;
+    case 23:
+        break;
+    case 24:
+        break;
+    case 25:
+        break;
+    case 26:
+        break;
+    case 27:
+        break;
+    case 28:
+        break;
+    case 29:
+        break;
+
+    default:
+        break;
+    }
+
+    return result;
+}
+
 void sk_init(void)
 {
     sk_step = SK_HEAD_VERIFY;
@@ -278,12 +388,44 @@ void sk_proc(void)
         byte_count++;
         send_data[byte_count] = crcData & 0xff;
 
-        USART_3_PRINT((char *)send_data);
+        usart3_send_array(send_data, byte_count + 1);
         sk_step = SK_HEAD_VERIFY;
 
         clearFrame();
         break;
     case SK_DATA_03:
+
+        // uint8_t addr;
+        // uint8_t tempAddr;
+        // uint16_t crcData;
+        uint8_t read_count;
+        // uint8_t byte_count;
+        int tempData2 = 0;
+        addr = receive_data[3];
+        tempAddr = addr;
+        memset(send_data, 0, 50);
+
+        read_count = receive_data[5];
+        byte_count = read_count * 2;
+
+        for (uint8_t i = 0; i < byte_count; i += 2, tempAddr++)
+        {
+            tempData2 = 0;
+            getRegisterVal(tempAddr, &tempData2);
+            send_data[i + 3] = tempData2 >> 8;
+            send_data[i + 4] = tempData2 & 0xFF;
+            /* code */
+        }
+
+        send_data[0] = 1;
+        send_data[1] = 3;
+        send_data[2] = byte_count;
+        byte_count += 3;
+        crcData = crc16(send_data, byte_count);
+        send_data[byte_count] = crcData >> 8;
+        byte_count++;
+        send_data[byte_count] = crcData & 0xFF;
+        usart3_send_array(send_data, byte_count + 1);
         sk_step = SK_HEAD_VERIFY;
 
         clearFrame();

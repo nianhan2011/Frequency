@@ -4,15 +4,19 @@
 void LED_Init(void)
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);	 //Ê¹ÄÜA¶Ë¿ÚÊ±ÖÓ
+ 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);	 //Ê¹ï¿½ï¿½Aï¿½Ë¿ï¿½Ê±ï¿½ï¿½
 	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;	 
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //ÍÆÍìÊä³ö
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//ËÙ¶È50MHz
- 	GPIO_Init(GPIOA, &GPIO_InitStructure);	  //³õÊ¼»¯GPIOA
+ 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;//ï¿½Ù¶ï¿½50MHz
+ 	GPIO_Init(GPIOA, &GPIO_InitStructure);	  //ï¿½ï¿½Ê¼ï¿½ï¿½GPIOA
  	GPIO_SetBits(GPIOA,GPIO_Pin_1);
 }
 
+void led_turn(void)
+{
+	PAout(1) = !PAout(1);
+}
 
 
 

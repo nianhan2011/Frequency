@@ -26,7 +26,6 @@ void clearFrame(void)
     usart3_fram.InfBit.FramFinishFlag = 0;
     memset((char *)usart3_fram.Data_RX_BUF, 0, strlen((char *)usart3_fram.Data_RX_BUF));
 
-    // 01 01 00 00 00 18 3C 00
     // memcpy(usart3_fram.Data_RX_BUF, test333, 8);
     // usart3_fram.InfBit.FramLength = 8;
 }
@@ -128,4 +127,21 @@ void USART_3_IRQnHandler(void)
 
         ucCh = USART_ReceiveData(USART_3);
     }
+}
+static void usart_send_byte(USART_TypeDef *pUSARTx, uint8_t data)
+{
+    USART_SendData(pUSARTx, data);
+    while (USART_GetFlagStatus(pUSARTx, USART_FLAG_TXE) == RESET)
+        ;
+}
+
+void usart3_send_array(uint8_t *array, uint8_t num)
+{
+    uint8_t i;
+    for (i = 0; i < num; i++)
+    {
+        usart_send_byte(USART_3, array[i]);
+    }
+    while (USART_GetFlagStatus(USART_3, USART_FLAG_TC) == RESET)
+        ;
 }
