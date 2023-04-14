@@ -137,7 +137,7 @@
             <DriverSelection>4100</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>STLink\ST-LINKIII-KEIL_SWO.dll</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon;.\SYSTEM\queue;.\HARDWARE\key</IncludePath>
+              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon;.\SYSTEM\queue;.\HARDWARE\key;.\HARDWARE\vdf</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -584,6 +584,26 @@
               <FileName>usart3.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\HARDWARE\samkoon\usart3.h</FilePath>
+            </File>
+            <File>
+              <FileName>usart2.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\HARDWARE\vdf\usart2.h</FilePath>
+            </File>
+            <File>
+              <FileName>vdf_710.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\vdf\vdf_710.c</FilePath>
+            </File>
+            <File>
+              <FileName>vdf_710.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\HARDWARE\vdf\vdf_710.h</FilePath>
+            </File>
+            <File>
+              <FileName>usart2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\vdf\usart2.c</FilePath>
             </File>
           </Files>
         </Group>

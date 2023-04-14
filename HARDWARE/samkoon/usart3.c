@@ -24,7 +24,7 @@ void clearFrame(void)
     usart3_fram.InfBit.FramLength = 0;
     usart3_fram.InfBit.ReadLength = 0;
     usart3_fram.InfBit.FramFinishFlag = 0;
-    memset((char *)usart3_fram.Data_RX_BUF, 0, strlen((char *)usart3_fram.Data_RX_BUF));
+//    memset((char *)usart3_fram.Data_RX_BUF, 0, strlen((char *)usart3_fram.Data_RX_BUF));
 
     // memcpy(usart3_fram.Data_RX_BUF, test333, 8);
     // usart3_fram.InfBit.FramLength = 8;

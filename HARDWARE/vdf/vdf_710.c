@@ -1,15 +1,15 @@
-#include "sk_hmi.h"
-#include "usart3.h"
+#include "usart2.h"
+#include "vdf_710.h"
 #include "queue.h"
 #include <string.h>
-#include "vdf_710.h"
-#include <stdio.h>
-static __IO uint8_t sk_receive_data[10] = {0};
-static __IO uint8_t sk_send_data[50] = {0};
 
-SK_STEP sk_step = SK_HEAD_VERIFY;
+static __IO uint8_t receive_data[20] = {0};
+static __IO uint8_t send_data[20] = {0x01, 0x03, 0x10, 0x00, 0x00, 0x05, 0x81, 0x09};
+__IO uint8_t v_data[20] = {0};
 
-const uint8_t auchCRCHi[] = {
+VDF_STEP vdf_step = VDF_HEAD_VERIFY;
+
+static const uint8_t auchCRCHi[] = {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,
     0x80, 0x41, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41,
     0x00, 0xC1, 0x81, 0x40, 0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0,
@@ -37,7 +37,7 @@ const uint8_t auchCRCHi[] = {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,
     0x80, 0x41, 0x00, 0xC1, 0x81, 0x40};
 /* CRC��λ�ֽ�ֵ��*/
-const uint8_t auchCRCLo[] = {
+static const uint8_t auchCRCLo[] = {
     0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06,
     0x07, 0xC7, 0x05, 0xC5, 0xC4, 0x04, 0xCC, 0x0C, 0x0D, 0xCD,
     0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09,
@@ -65,7 +65,7 @@ const uint8_t auchCRCLo[] = {
     0x44, 0x84, 0x85, 0x45, 0x87, 0x47, 0x46, 0x86, 0x82, 0x42,
     0x43, 0x83, 0x41, 0x81, 0x80, 0x40};
 
-uint16_t getCoilVal(uint16_t addr, uint16_t *tempData) // ȡ��Ȧ״̬ ����0��ʾ�ɹ�
+static uint16_t getCoilVal(uint16_t addr, uint16_t *tempData) // ȡ��Ȧ״̬ ����0��ʾ�ɹ�
 {
     uint16_t result = 0;
     uint16_t tempAddr;
@@ -156,36 +156,26 @@ uint16_t getCoilVal(uint16_t addr, uint16_t *tempData) // ȡ��Ȧ״̬ ���
     return result;
 }
 
-uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ����0��ʾ�ɹ�
+static uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ����0��ʾ�ɹ�
 {
     int result = 0;
     uint16_t tempAddr;
 
-    uint16_t hz;
-    uint16_t m_v;
-    uint16_t out_v;
-    uint16_t out_a;
-
     tempAddr = addr & 0xfff;
-    if (sizeof(v_data) < 10)
-    {
-        return result;
-    }
+
     switch (tempAddr & 0xff)
     {
     case 1:
-
-        *tempData = (v_data[2] << 8) + v_data[3]; // ��ѹֵ
+        *tempData = 1; // ��ѹֵ
         break;
     case 2:
-        *tempData = (v_data[4] << 8) + v_data[5]; // ��ѹֵ
+        *tempData = 2; // ��ѹֵ
         break;
     case 3:
-        *tempData = (v_data[6]) + v_data[7]; // COOL1
+        *tempData = 3; // COOL1
         break;
     case 4:
-        *tempData = (v_data[8] << 8) + v_data[9]; // HEAT1
-
+        *tempData = 4; // HEAT1
         break;
     case 5:
         *tempData = 5; // COOL2
@@ -275,13 +265,13 @@ uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ��
     return result;
 }
 
-void sk_init(void)
+void vdf_init(void)
 {
-    sk_step = SK_HEAD_VERIFY;
-    usart3_init();
+    vdf_step = VDF_HEAD_VERIFY;
+    usart2_init();
 }
 
-uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)
+static uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)
 {
     uint8_t uchCRCHi = 0xFF; /* ��CRC�ֽڳ�ʼ�� */
     uint8_t uchCRCLo = 0xFF; /* ��CRC �ֽڳ�ʼ�� */
@@ -295,153 +285,79 @@ uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)
     return (uchCRCHi << 8 | uchCRCLo);
 }
 
-void sk_proc(void)
+void vdf_send_proc(void)
 {
-    switch (sk_step)
+    //    uint16_t crcData;
+    //    memset(send_data, 0, 20);
+    //    send_data[0] = 0x01;
+    //    send_data[1] = 0x03;
+    //    send_data[2] = 0x10;
+    //    send_data[3] = 0x00;
+    //    send_data[4] = 0x00;
+    //    send_data[5] = 0x05;
+    //    crcData = crc16(send_data, 6);
+    //    send_data[6] = crcData >> 8;
+    //    send_data[7] = crcData & 0xFF;
+
+    RS485_TX_ENABLE
+    usart2_send_array(send_data, 8);
+    RS485_RX_ENABLE
+}
+
+void vdf_receive_proc(void)
+{
+    switch (vdf_step)
     {
-    case SK_HEAD_VERIFY:
-        // if ((QUEUE_LEN(usart3_fram)) < 8)
-        // {
-        //     break;
-        // }
-        if (usart3_fram.InfBit.FramLength < 8)
+    case VDF_HEAD_VERIFY:
+        if (usart2_fram.InfBit.FramLength < 15)
         {
-
             break;
         }
-
-        // for (uint8_t i = 0; i < 8; i++)
-        // {
-        //     QUEUE_OUT(usart3_fram, &sk_receive_data[i]);
-        // }
-
-        // if (sk_receive_data[0] == 1)
-        // {
-        //     sk_step = SK_CRC_VERIFY;
-        // }
-        if (usart3_fram.Data_RX_BUF[0] != 1)
+        if (usart2_fram.Data_RX_BUF[0] != 1)
         {
-            //            clearFrame();
+            // clear_usart2_frame();
+            usart2_fram.InfBit.FramLength = 0;
             break;
         }
-        memcpy((char *)sk_receive_data, &(usart3_fram.Data_RX_BUF[0]), 8);
-        sk_step = SK_CRC_VERIFY;
+        memcpy((char *)receive_data, &(usart2_fram.Data_RX_BUF[0]), 15);
+        vdf_step = VDF_CRC_VERIFY;
         break;
-    case SK_CRC_VERIFY:;
-        uint16_t crc_data = crc16(sk_receive_data, 6);
-        if (crc_data == sk_receive_data[7] + (sk_receive_data[6] << 8))
+    case VDF_CRC_VERIFY:
+        uint16_t crc_data = crc16(receive_data, 13);
+        if (crc_data == receive_data[14] + (receive_data[13] << 8))
         {
-            sk_step = SK_CATEGORY_VERIFY;
+            vdf_step = VDF_CATEGORY_VERIFY;
         }
         else
         {
-            sk_step = SK_HEAD_VERIFY;
+            // clear_usart2_frame();
+            usart2_fram.InfBit.FramLength = 0;
+
+            vdf_step = VDF_HEAD_VERIFY;
         }
 
         break;
-    case SK_CATEGORY_VERIFY:
+    case VDF_CATEGORY_VERIFY:
 
-        if (sk_receive_data[1] == 1)
+        if (receive_data[1] == 1)
         {
-            sk_step = SK_DATA_01;
+            // vdf_step = VDF_DATA_01;
         }
-        else if (sk_receive_data[1] == 3)
+        else if (receive_data[1] == 3)
         {
-            sk_step = SK_DATA_03;
+            vdf_step = VDF_DATA_03;
         }
 
         break;
-    case SK_DATA_01:;
-
-        uint8_t position;
-        uint8_t exit = 0;
-        uint8_t addr = sk_receive_data[3];
-        uint8_t bit_count = sk_receive_data[5];
-        uint8_t byte_count = bit_count / 8;
-        uint16_t crcData;
-        uint16_t tempData;
-        uint8_t tempAddr;
-
-        tempAddr = addr;
-        memset(sk_send_data, 0, 50);
-        if (bit_count % 8 != 0)
-        {
-            byte_count++;
-        }
-
-        for (uint8_t k = 0; k < byte_count; k++)
-        {
-            position = k + 3;
-            sk_send_data[position] = 0;
-            for (uint8_t i = 0; i < 8; i++)
-            {
-
-                tempData = 0;
-                getCoilVal(tempAddr, &tempData);
-
-                sk_send_data[position] |= tempData << i;
-                tempAddr++;
-                if (tempAddr >= addr + bit_count)
-                {
-                    exit = 1;
-                    break;
-                }
-            }
-            if (exit == 1)
-                break;
-        }
-
-        sk_send_data[0] = 1;
-        sk_send_data[1] = 1;
-        sk_send_data[2] = byte_count;
-
-        byte_count += 3;
-        crcData = crc16(sk_send_data, byte_count);
-        sk_send_data[byte_count] = crcData >> 8;
-        byte_count++;
-        sk_send_data[byte_count] = crcData & 0xff;
-
-        usart3_send_array(sk_send_data, byte_count + 1);
-        sk_step = SK_HEAD_VERIFY;
-
-        clearFrame();
+    case VDF_DATA_01:;
         break;
-    case SK_DATA_03:
 
-        // uint8_t addr;
-        // uint8_t tempAddr;
-        // uint16_t crcData;
-        uint8_t read_count;
-        // uint8_t byte_count;
-        int tempData2 = 0;
-        addr = sk_receive_data[3];
-        tempAddr = addr;
-        memset(sk_send_data, 0, 50);
+    case VDF_DATA_03:
 
-        read_count = sk_receive_data[5];
-        byte_count = read_count * 2;
+        memcpy((char *)v_data, (char *)&receive_data[3], 10);
+        vdf_step = VDF_HEAD_VERIFY;
 
-        for (uint8_t i = 0; i < byte_count; i += 2, tempAddr++)
-        {
-            tempData2 = 0;
-            getRegisterVal(tempAddr, &tempData2);
-            sk_send_data[i + 3] = tempData2 >> 8;
-            sk_send_data[i + 4] = tempData2 & 0xFF;
-            /* code */
-        }
-
-        sk_send_data[0] = 1;
-        sk_send_data[1] = 3;
-        sk_send_data[2] = byte_count;
-        byte_count += 3;
-        crcData = crc16(sk_send_data, byte_count);
-        sk_send_data[byte_count] = crcData >> 8;
-        byte_count++;
-        sk_send_data[byte_count] = crcData & 0xFF;
-        usart3_send_array(sk_send_data, byte_count + 1);
-        sk_step = SK_HEAD_VERIFY;
-
-        clearFrame();
+        clear_usart2_frame();
 
         break;
 
