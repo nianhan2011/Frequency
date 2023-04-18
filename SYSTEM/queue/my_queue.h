@@ -1,5 +1,5 @@
-#ifndef __QUEUE_H
-#define __QUEUE_H
+#ifndef __MY_QUEUE_H
+#define __MY_QUEUE_H
 #include "common.h"
 
 typedef struct

@@ -1,6 +1,5 @@
 #include "usart2.h"
 #include "vdf_710.h"
-#include "queue.h"
 #include <string.h>
 
 static __IO uint8_t receive_data[20] = {0};
@@ -315,8 +314,7 @@ void vdf_receive_proc(void)
         }
         if (usart2_fram.Data_RX_BUF[0] != 1)
         {
-            // clear_usart2_frame();
-            usart2_fram.InfBit.FramLength = 0;
+            clear_usart2_frame();
             break;
         }
         memcpy((char *)receive_data, &(usart2_fram.Data_RX_BUF[0]), 15);

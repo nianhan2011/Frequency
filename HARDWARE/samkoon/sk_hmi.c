@@ -1,6 +1,5 @@
 #include "sk_hmi.h"
 #include "usart3.h"
-#include "queue.h"
 #include <string.h>
 #include "vdf_710.h"
 #include <stdio.h>
@@ -321,7 +320,7 @@ void sk_proc(void)
         // }
         if (usart3_fram.Data_RX_BUF[0] != 1)
         {
-            //            clearFrame();
+            clearFrame();
             break;
         }
         memcpy((char *)sk_receive_data, &(usart3_fram.Data_RX_BUF[0]), 8);
@@ -335,6 +334,7 @@ void sk_proc(void)
         }
         else
         {
+		    clearFrame();
             sk_step = SK_HEAD_VERIFY;
         }
 

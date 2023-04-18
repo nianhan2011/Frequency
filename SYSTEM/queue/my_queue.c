@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "my_queue.h"
 #include <string.h>
 #include "os_system.h"
 void queue_init(uint8_t **head, uint8_t **tail, uint8_t *buff, uint8_t len)
@@ -11,10 +11,10 @@ void queue_init(uint8_t **head, uint8_t **tail, uint8_t *buff, uint8_t len)
 void queue_in(uint8_t **head, uint8_t **tail, uint8_t *buff, uint8_t len, uint8_t *data, uint8_t data_len, FunctionalState is_interrupt)
 {
     uint8_t pSta = 0;
-//    if (is_interrupt == ENABLE)
-//    {
-//        cpu_critical_control(CPU_ENTER_CRITICAL, &pSta);
-//    }
+    if (is_interrupt == ENABLE)
+    {
+        cpu_critical_control(CPU_ENTER_CRITICAL, &pSta);
+    }
 
     for (uint8_t i = 0; i < data_len; i++)
     {
@@ -34,21 +34,21 @@ void queue_in(uint8_t **head, uint8_t **tail, uint8_t *buff, uint8_t len, uint8_
         /* code */
     }
 
-//    if (is_interrupt == ENABLE)
-//    {
-//        cpu_critical_control(CPU_EXIT_CRITICAL, &pSta);
-//    }
+    if (is_interrupt == ENABLE)
+    {
+        cpu_critical_control(CPU_EXIT_CRITICAL, &pSta);
+    }
 }
 
 uint8_t queue_out(uint8_t **head, uint8_t **tail, uint8_t *buff, uint8_t len, uint8_t *data, FunctionalState is_interrupt)
 {
     uint8_t pSta = 0;
 
-//    if (is_interrupt == ENABLE)
-//    {
-//        uint8_t pSta = 0;
-//        cpu_critical_control(CPU_ENTER_CRITICAL, &pSta);
-//    }
+    if (is_interrupt == ENABLE)
+    {
+        uint8_t pSta = 0;
+        cpu_critical_control(CPU_ENTER_CRITICAL, &pSta);
+    }
     uint8_t status = 0;
     if (*head != *tail)
     {
@@ -59,10 +59,10 @@ uint8_t queue_out(uint8_t **head, uint8_t **tail, uint8_t *buff, uint8_t len, ui
             *head = buff;
         }
     }
-//    if (is_interrupt == ENABLE)
-//    {
-//        cpu_critical_control(CPU_EXIT_CRITICAL, &pSta);
-//    }
+    if (is_interrupt == ENABLE)
+    {
+        cpu_critical_control(CPU_EXIT_CRITICAL, &pSta);
+    }
     return status;
 }
 

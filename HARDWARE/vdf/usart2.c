@@ -21,9 +21,9 @@ USART_Fram usart2_fram;
 void clear_usart2_frame(void)
 {
     usart2_fram.InfBit.FramLength = 0;
-    usart2_fram.InfBit.ReadLength = 0;
-    usart2_fram.InfBit.FramFinishFlag = 0;
-    memset((char *)usart2_fram.Data_RX_BUF, 0, strlen((char *)usart2_fram.Data_RX_BUF));
+    // usart2_fram.InfBit.ReadLength = 0;
+    // usart2_fram.InfBit.FramFinishFlag = 0;
+    // memset((char *)usart2_fram.Data_RX_BUF, 0, strlen((char *)usart2_fram.Data_RX_BUF));
 
     // memcpy(usart2_fram.Data_RX_BUF, test222, 8);
     // usart2_fram.InfBit.FramLength = 8;

@@ -55,7 +55,7 @@
 /********************************** 函数声明 ***************************************/
 void USART_printf(USART_TypeDef *USARTx, char *Data, ...);
 
-#define RX_BUF_MAX_LEN 200 // 最大接收缓存字节数
+#define RX_BUF_MAX_LEN 50 // 最大接收缓存字节数
 
 typedef struct // 串口数据帧的处理结构体
 {

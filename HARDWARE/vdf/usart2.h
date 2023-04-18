@@ -5,7 +5,6 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdbool.h>
-#include "queue.h"
 #include "delay.h"
 #if defined(__CC_ARM)
 #pragma anon_unions

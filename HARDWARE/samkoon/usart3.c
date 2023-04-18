@@ -22,8 +22,8 @@ u8 test333[10] = {0x01, 0x01, 0, 0, 0, 0x18, 0x3C, 0x00};
 void clearFrame(void)
 {
     usart3_fram.InfBit.FramLength = 0;
-    usart3_fram.InfBit.ReadLength = 0;
-    usart3_fram.InfBit.FramFinishFlag = 0;
+    // usart3_fram.InfBit.ReadLength = 0;
+    // usart3_fram.InfBit.FramFinishFlag = 0;
 //    memset((char *)usart3_fram.Data_RX_BUF, 0, strlen((char *)usart3_fram.Data_RX_BUF));
 
     // memcpy(usart3_fram.Data_RX_BUF, test333, 8);
