@@ -7,6 +7,10 @@ typedef enum
     OS_TASK2,
     OS_TASK3,
     OS_TASK4,
+    // OS_TASK5,
+    // OS_TASK6,
+    // OS_TASK7,
+
     OS_TASK_SUM
 } OS_TaskID;
 

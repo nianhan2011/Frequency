@@ -1,6 +1,7 @@
 #ifndef __SK_HMI_H
 #define __SK_HMI_H
 
+#include "stm32f10x.h"
 typedef enum
 {
     SK_HEAD_VERIFY,
@@ -12,6 +13,8 @@ typedef enum
     SK_DATA_06,
 
 } SK_STEP;
+
+extern __IO uint8_t sk_coil_register[50];
 
 void sk_init(void);
 void sk_proc(void);

@@ -1,12 +1,30 @@
 #include "usart2.h"
 #include "vdf_710.h"
 #include <string.h>
+#include "sk_hmi.h"
 
-static __IO uint8_t receive_data[20] = {0};
-static __IO uint8_t send_data[20] = {0x01, 0x03, 0x10, 0x00, 0x00, 0x05, 0x81, 0x09};
+static __IO uint8_t receive_data[50] = {0};
+
+static __IO uint8_t send_data[20] = {0x01, 0x03, 0x10, 0x00, 0x00, 0x05, 0x81, 0x09};         // 查寄存器的值
+static __IO uint8_t check_blow_status[20] = {0x01, 0x03, 0x30, 0x00, 0x00, 0x01, 0x8B, 0x0A}; // 检查风机运行状态
+
+static __IO uint8_t modbus_open_data[20] = {0x01, 0x06, 0x00, 0x02, 0x00, 0x02, 0xA9, 0xCB}; // 开启通讯控制
+static __IO uint8_t pannel_open_data[20] = {0x01, 0x06, 0x00, 0x02, 0x00, 0x00, 0x28, 0x0A}; // 开启面板控制
+
+static __IO uint8_t blow_open[20] = {0x01, 0x06, 0x20, 0x00, 0x00, 0x01, 0x43, 0xCA};  // 开启风机
+static __IO uint8_t blow_close[20] = {0x01, 0x06, 0x20, 0x00, 0x00, 0x05, 0x42, 0x09}; // 关闭风机
+
 __IO uint8_t v_data[20] = {0};
 
+// __IO uint8_t blower_status = {0};
+
+__IO uint8_t should_blower_open = 0;
+__IO uint8_t should_blower_open_next = 0;
+__IO uint8_t should_blower_close = 0;
+__IO uint8_t should_blower_close_next = 0;
 VDF_STEP vdf_step = VDF_HEAD_VERIFY;
+VDF_SEND_STEP send_step = VDF_READ_REGISTER;
+static u8 receive_length = 0;
 
 static const uint8_t auchCRCHi[] = {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,
@@ -284,6 +302,79 @@ static uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)
     return (uchCRCHi << 8 | uchCRCLo);
 }
 
+void modbus_open()
+{
+    RS485_TX_ENABLE
+    usart2_send_array(modbus_open_data, 8);
+    RS485_RX_ENABLE
+}
+
+void vdf_send_blow_open(void)
+{
+    // if (should_blower_open)
+    // {
+    //     should_blower_open = 0;
+    //     should_blower_open_next = 1;
+    //     RS485_TX_ENABLE
+    //     usart2_send_array(modbus_open, 8);
+    //     RS485_RX_ENABLE
+    // }
+    if (should_blower_open)
+    {
+        should_blower_open = 0;
+        RS485_TX_ENABLE
+        usart2_send_array(blow_open, 8);
+        RS485_RX_ENABLE
+    }
+    else
+    {
+        // send_step_change();
+    }
+}
+
+void vdf_send_blow_close(void)
+{
+    // if (should_blower_close)
+    // {
+    // should_blower_close = 0;
+    // should_blower_close_next = 1;
+    // RS485_TX_ENABLE
+    // usart2_send_array(modbus_open, 8);
+    // RS485_RX_ENABLE
+    // }
+
+    if (should_blower_close)
+    {
+        // should_blower_close_next = 0;
+        should_blower_close = 0;
+        RS485_TX_ENABLE
+        usart2_send_array(blow_close, 8);
+        RS485_RX_ENABLE
+    }
+    else
+    {
+        // send_step_change();
+    }
+}
+
+void check_blower_status(void)
+{
+    RS485_TX_ENABLE
+    usart2_send_array(check_blow_status, 8);
+    RS485_RX_ENABLE
+}
+
+void send_step_change(void)
+{
+    if (send_step == VDF_CLOSE_BLOW)
+    {
+        send_step = VDF_READ_REGISTER;
+    }
+    else
+    {
+        send_step++;
+    }
+}
 void vdf_send_proc(void)
 {
     //    uint16_t crcData;
@@ -298,9 +389,28 @@ void vdf_send_proc(void)
     //    send_data[6] = crcData >> 8;
     //    send_data[7] = crcData & 0xFF;
 
-    RS485_TX_ENABLE
-    usart2_send_array(send_data, 8);
-    RS485_RX_ENABLE
+    switch (send_step)
+    {
+    case VDF_READ_REGISTER:
+        RS485_TX_ENABLE
+        usart2_send_array(send_data, 8);
+        RS485_RX_ENABLE
+        break;
+    case VDF_READ_BLOW:
+        check_blower_status();
+        break;
+
+    case VDF_OPEN_BLOW:
+        vdf_send_blow_open();
+        break;
+    case VDF_CLOSE_BLOW:
+        vdf_send_blow_close();
+        break;
+
+    default:
+        break;
+    }
+    send_step_change();
 }
 
 void vdf_receive_proc(void)
@@ -308,7 +418,7 @@ void vdf_receive_proc(void)
     switch (vdf_step)
     {
     case VDF_HEAD_VERIFY:
-        if (usart2_fram.InfBit.FramLength < 15)
+        if (usart2_fram.InfBit.FramLength < 3)
         {
             break;
         }
@@ -317,20 +427,32 @@ void vdf_receive_proc(void)
             clear_usart2_frame();
             break;
         }
-        memcpy((char *)receive_data, &(usart2_fram.Data_RX_BUF[0]), 15);
+
+        if (usart2_fram.Data_RX_BUF[1] == 6)
+        {
+            receive_length = 8;
+        }
+        else if (usart2_fram.Data_RX_BUF[1] == 3)
+        {
+            receive_length = usart2_fram.Data_RX_BUF[2] + 5;
+        }
+        if (usart2_fram.InfBit.FramLength < receive_length)
+        {
+            break;
+        }
+        memcpy((char *)receive_data, &(usart2_fram.Data_RX_BUF[0]), receive_length);
         vdf_step = VDF_CRC_VERIFY;
         break;
+
     case VDF_CRC_VERIFY:
-        uint16_t crc_data = crc16(receive_data, 13);
-        if (crc_data == receive_data[14] + (receive_data[13] << 8))
+        uint16_t crc_data = crc16(receive_data, receive_length - 2);
+        if (crc_data == receive_data[receive_length - 1] + (receive_data[receive_length - 2] << 8))
         {
             vdf_step = VDF_CATEGORY_VERIFY;
         }
         else
         {
-            // clear_usart2_frame();
-            usart2_fram.InfBit.FramLength = 0;
-
+            clear_usart2_frame();
             vdf_step = VDF_HEAD_VERIFY;
         }
 
@@ -345,6 +467,10 @@ void vdf_receive_proc(void)
         {
             vdf_step = VDF_DATA_03;
         }
+        else if (receive_data[1] == 6)
+        {
+            vdf_step = VDF_DATA_06;
+        }
 
         break;
     case VDF_DATA_01:;
@@ -352,10 +478,30 @@ void vdf_receive_proc(void)
 
     case VDF_DATA_03:
 
-        memcpy((char *)v_data, (char *)&receive_data[3], 10);
+        if (receive_length == 15)
+        {
+            memcpy((char *)v_data, (char *)&receive_data[3], 10);
+        }
+        else if (receive_length == 7)
+        {
+            if (receive_data[4] == 1)
+            {
+                sk_coil_register[3] = 1;
+            }
+            else
+            {
+                sk_coil_register[3] = 0;
+            }
+        }
         vdf_step = VDF_HEAD_VERIFY;
-
         clear_usart2_frame();
+        // send_step_change();
+
+        break;
+    case VDF_DATA_06:
+        vdf_step = VDF_HEAD_VERIFY;
+        clear_usart2_frame();
+        // send_step_change();
 
         break;
 

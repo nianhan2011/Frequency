@@ -32,7 +32,7 @@
 #define RCC_USART_GPIO_ClockCmd RCC_APB2PeriphClockCmd
 #define RCC_USART2_GPIO_Periph RCC_APB2Periph_GPIOA
 #define PORT_USART2_TX GPIOA
-#define PIN_USART2_TX GPIO_Pin_2
+#define  PIN_USART2_TX GPIO_Pin_2
 #define PORT_USART2_RX GPIOA
 #define PIN_USART2_RX GPIO_Pin_3
 

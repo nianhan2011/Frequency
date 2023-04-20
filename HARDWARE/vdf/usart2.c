@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "delay.h"
+#include "stm32f10x.h"
 
 static void USART_GPIO_Config(void);
 static void USART_USART_Config(void);
@@ -20,7 +21,10 @@ USART_Fram usart2_fram;
 
 void clear_usart2_frame(void)
 {
+    __disable_irq();
     usart2_fram.InfBit.FramLength = 0;
+    __enable_irq();
+
     // usart2_fram.InfBit.ReadLength = 0;
     // usart2_fram.InfBit.FramFinishFlag = 0;
     // memset((char *)usart2_fram.Data_RX_BUF, 0, strlen((char *)usart2_fram.Data_RX_BUF));
@@ -49,7 +53,7 @@ static void USART_GPIO_Config(void)
 
     RCC_USART_GPIO_ClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
 
-	RCC_USART_GPIO_ClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+    RCC_USART_GPIO_ClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
 
     GPIO_InitTypeDef GPIO_InitStructure;
 
@@ -69,8 +73,6 @@ static void USART_GPIO_Config(void)
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_Init(GPIOD, &GPIO_InitStructure);
     RS485_RX_ENABLE
-
-    
 }
 
 static void USART_4G_NVIC_Configuration(void)

@@ -5,8 +5,8 @@
 #include <stdio.h>
 static __IO uint8_t sk_receive_data[10] = {0};
 static __IO uint8_t sk_send_data[50] = {0};
-static __IO uint8_t sk_coil_register[50] = {0};
-// static __IO uint8_t should_ = 0
+__IO uint8_t sk_coil_register[50] = {0};
+
 
 SK_STEP sk_step = SK_HEAD_VERIFY;
 static void modbus01(void);
@@ -296,16 +296,15 @@ uint16_t setCoilVal(uint16_t addr, uint16_t tempData) // 设定线圈状态
         break;
     case 3:
         // COOL2_FLAG = tempData;
-        if (tempAddr && sk_coil_register[3] == 0)
+        if (tempData == 1 && sk_coil_register[3] == 0)
         {
-             
-
-            
-
-        } else {
-
+             should_blower_open = 1;
+        } 
+        if (tempData ==0 && sk_coil_register[3] == 1) 
+        {
+             should_blower_close = 1;
         }
-        sk_coil_register[3] = tempData; // 风机
+        // sk_coil_register[3] = tempData; // 风机
 
         break;
     case 4:
