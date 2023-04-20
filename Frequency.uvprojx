@@ -660,6 +660,11 @@
               <FileType>5</FileType>
               <FilePath>.\SYSTEM\queue\my_queue.h</FilePath>
             </File>
+            <File>
+              <FileName>os_system__typedef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\SYSTEM\os_system\os_system__typedef.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

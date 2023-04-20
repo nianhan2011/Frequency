@@ -8,6 +8,9 @@ typedef enum
     SK_CATEGORY_VERIFY,
     SK_DATA_01,
     SK_DATA_03,
+    SK_DATA_05,
+    SK_DATA_06,
+
 } SK_STEP;
 
 void sk_init(void);

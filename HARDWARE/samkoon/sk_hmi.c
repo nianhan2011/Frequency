@@ -5,8 +5,13 @@
 #include <stdio.h>
 static __IO uint8_t sk_receive_data[10] = {0};
 static __IO uint8_t sk_send_data[50] = {0};
+static __IO uint8_t sk_coil_register[50] = {0};
+// static __IO uint8_t should_ = 0
 
 SK_STEP sk_step = SK_HEAD_VERIFY;
+static void modbus01(void);
+static void modbus03(void);
+static void modbus05(void);
 
 const uint8_t auchCRCHi[] = {
     0x00, 0xC1, 0x81, 0x40, 0x01, 0xC0, 0x80, 0x41, 0x01, 0xC0,
@@ -75,16 +80,16 @@ uint16_t getCoilVal(uint16_t addr, uint16_t *tempData) // ȡ��Ȧ״̬ ���
     {
 
     case 1:
-        *tempData = 1; // ����1��־
+        *tempData = sk_coil_register[1]; // ����1��־
         break;
     case 2:
-        *tempData = 1; // ����2��־
+        *tempData = sk_coil_register[2]; // ����2��־
         break;
     case 3:
-        *tempData = 1; // ����1��־
+        *tempData = sk_coil_register[3]; // ����1��־
         break;
     case 4:
-        *tempData = 1; // ����2��־
+        *tempData = sk_coil_register[4]; // ����1��־
         break;
     case 5:
         *tempData = 1; // ������־
@@ -159,11 +164,6 @@ uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ��
 {
     int result = 0;
     uint16_t tempAddr;
-
-    uint16_t hz;
-    uint16_t m_v;
-    uint16_t out_v;
-    uint16_t out_a;
 
     tempAddr = addr & 0xfff;
     if (sizeof(v_data) < 10)
@@ -274,6 +274,68 @@ uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ��
     return result;
 }
 
+uint16_t setCoilVal(uint16_t addr, uint16_t tempData) // 设定线圈状态
+{
+    uint16_t result = 0;
+    uint16_t tempAddr;
+
+    tempAddr = addr & 0xfff;
+
+    switch (tempAddr & 0xff)
+    {
+
+    case 1:
+        // COOL1_FLAG = tempData;
+        sk_coil_register[1] = tempData; // 变频器电源开关
+        break;
+    case 2:
+        // HEAT1_FLAG = tempData;
+        
+        sk_coil_register[2] = tempData; // 自动开关 0手动，1自动
+
+        break;
+    case 3:
+        // COOL2_FLAG = tempData;
+        if (tempAddr && sk_coil_register[3] == 0)
+        {
+             
+
+            
+
+        } else {
+
+        }
+        sk_coil_register[3] = tempData; // 风机
+
+        break;
+    case 4:
+        sk_coil_register[4] = tempData; // 净化器
+
+        break;
+
+    case 5:
+        // WORK_FLAG = tempData; // 工作标志
+        break;
+
+    case 6:
+        // LOCAL_FLAG = tempData; // 手动，自动切换
+        break;
+    case 7: // RESET_FLAG=tempData;  //复位
+        break;
+    case 8: // SET_FLAG=tempData;
+        break;
+    case 16:
+        // RESET_FLAG = tempData; // 加热1时间
+
+        break;
+    case 17: //	HEAT2_TIME=tempData;//加热2时间
+        break;
+    default:
+        break;
+    }
+
+    return result;
+}
 void sk_init(void)
 {
     sk_step = SK_HEAD_VERIFY;
@@ -334,7 +396,7 @@ void sk_proc(void)
         }
         else
         {
-		    clearFrame();
+            clearFrame();
             sk_step = SK_HEAD_VERIFY;
         }
 
@@ -349,103 +411,158 @@ void sk_proc(void)
         {
             sk_step = SK_DATA_03;
         }
+        else if (sk_receive_data[1] == 5)
+        {
+            sk_step = SK_DATA_05;
+        }
+        else if (sk_receive_data[1] == 6)
+        {
+            sk_step = SK_DATA_06;
+        }
 
         break;
     case SK_DATA_01:;
-
-        uint8_t position;
-        uint8_t exit = 0;
-        uint8_t addr = sk_receive_data[3];
-        uint8_t bit_count = sk_receive_data[5];
-        uint8_t byte_count = bit_count / 8;
-        uint16_t crcData;
-        uint16_t tempData;
-        uint8_t tempAddr;
-
-        tempAddr = addr;
-        memset(sk_send_data, 0, 50);
-        if (bit_count % 8 != 0)
-        {
-            byte_count++;
-        }
-
-        for (uint8_t k = 0; k < byte_count; k++)
-        {
-            position = k + 3;
-            sk_send_data[position] = 0;
-            for (uint8_t i = 0; i < 8; i++)
-            {
-
-                tempData = 0;
-                getCoilVal(tempAddr, &tempData);
-
-                sk_send_data[position] |= tempData << i;
-                tempAddr++;
-                if (tempAddr >= addr + bit_count)
-                {
-                    exit = 1;
-                    break;
-                }
-            }
-            if (exit == 1)
-                break;
-        }
-
-        sk_send_data[0] = 1;
-        sk_send_data[1] = 1;
-        sk_send_data[2] = byte_count;
-
-        byte_count += 3;
-        crcData = crc16(sk_send_data, byte_count);
-        sk_send_data[byte_count] = crcData >> 8;
-        byte_count++;
-        sk_send_data[byte_count] = crcData & 0xff;
-
-        usart3_send_array(sk_send_data, byte_count + 1);
-        sk_step = SK_HEAD_VERIFY;
-
-        clearFrame();
+        modbus01();
         break;
     case SK_DATA_03:
-
-        // uint8_t addr;
-        // uint8_t tempAddr;
-        // uint16_t crcData;
-        uint8_t read_count;
-        // uint8_t byte_count;
-        int tempData2 = 0;
-        addr = sk_receive_data[3];
-        tempAddr = addr;
-        memset(sk_send_data, 0, 50);
-
-        read_count = sk_receive_data[5];
-        byte_count = read_count * 2;
-
-        for (uint8_t i = 0; i < byte_count; i += 2, tempAddr++)
-        {
-            tempData2 = 0;
-            getRegisterVal(tempAddr, &tempData2);
-            sk_send_data[i + 3] = tempData2 >> 8;
-            sk_send_data[i + 4] = tempData2 & 0xFF;
-            /* code */
-        }
-
-        sk_send_data[0] = 1;
-        sk_send_data[1] = 3;
-        sk_send_data[2] = byte_count;
-        byte_count += 3;
-        crcData = crc16(sk_send_data, byte_count);
-        sk_send_data[byte_count] = crcData >> 8;
-        byte_count++;
-        sk_send_data[byte_count] = crcData & 0xFF;
-        usart3_send_array(sk_send_data, byte_count + 1);
-        sk_step = SK_HEAD_VERIFY;
-
-        clearFrame();
-
+        modbus03();
         break;
-
+    case SK_DATA_05:
+        modbus05();
+        break;
     default:
         break;
     }
+}
+
+static void modbus01()
+{
+    uint8_t position;
+    uint8_t exit = 0;
+    uint8_t addr = sk_receive_data[3];
+    uint8_t bit_count = sk_receive_data[5];
+    uint8_t byte_count = bit_count / 8;
+    uint16_t crcData;
+    uint16_t tempData;
+    uint8_t tempAddr;
+
+    tempAddr = addr;
+    memset(sk_send_data, 0, 50);
+    if (bit_count % 8 != 0)
+    {
+        byte_count++;
+    }
+
+    for (uint8_t k = 0; k < byte_count; k++)
+    {
+        position = k + 3;
+        sk_send_data[position] = 0;
+        for (uint8_t i = 0; i < 8; i++)
+        {
+
+            tempData = 0;
+            getCoilVal(tempAddr, &tempData);
+
+            sk_send_data[position] |= tempData << i;
+            tempAddr++;
+            if (tempAddr >= addr + bit_count)
+            {
+                exit = 1;
+                break;
+            }
+        }
+        if (exit == 1)
+            break;
+    }
+
+    sk_send_data[0] = 1;
+    sk_send_data[1] = 1;
+    sk_send_data[2] = byte_count;
+
+    byte_count += 3;
+    crcData = crc16((uint8_t *)sk_send_data, byte_count);
+    sk_send_data[byte_count] = crcData >> 8;
+    byte_count++;
+    sk_send_data[byte_count] = crcData & 0xff;
+
+    usart3_send_array((uint8_t *)sk_send_data, byte_count + 1);
+    sk_step = SK_HEAD_VERIFY;
+
+    clearFrame();
+}
+
+static void modbus03()
+{
+    uint8_t addr;
+    uint8_t tempAddr;
+    uint16_t crcData;
+    uint8_t read_count;
+    uint8_t byte_count;
+    int tempData2 = 0;
+    addr = sk_receive_data[3];
+    tempAddr = addr;
+    memset((uint8_t *)sk_send_data, 0, 50);
+
+    read_count = sk_receive_data[5];
+    byte_count = read_count * 2;
+
+    for (uint8_t i = 0; i < byte_count; i += 2, tempAddr++)
+    {
+        tempData2 = 0;
+        getRegisterVal(tempAddr, &tempData2);
+        sk_send_data[i + 3] = tempData2 >> 8;
+        sk_send_data[i + 4] = tempData2 & 0xFF;
+        /* code */
+    }
+
+    sk_send_data[0] = 1;
+    sk_send_data[1] = 3;
+    sk_send_data[2] = byte_count;
+    byte_count += 3;
+    crcData = crc16((uint8_t *)sk_send_data, byte_count);
+    sk_send_data[byte_count] = crcData >> 8;
+    byte_count++;
+    sk_send_data[byte_count] = crcData & 0xFF;
+    usart3_send_array((uint8_t *)sk_send_data, byte_count + 1);
+    sk_step = SK_HEAD_VERIFY;
+
+    clearFrame();
+}
+static void modbus05()
+{
+    uint8_t addr;
+    uint8_t tempAddr;
+    uint16_t tempData;
+    uint8_t onOff;
+    uint8_t i;
+
+    // addr = (receBuf[2]<<8) + receBuf[3];
+    // tempAddr = addr & 0xfff;
+    addr = sk_receive_data[3];
+    tempAddr = addr;
+
+    // onOff = (receBuf[4]<<8) + receBuf[5];
+    onOff = sk_receive_data[4];
+
+    // if(onOff == 0xff00)
+    if (onOff == 0xff)
+    {
+        tempData = 1;
+    }
+    // else if(onOff == 0x0000)
+    else if (onOff == 0x00)
+    {
+        tempData = 0;
+    }
+
+    setCoilVal(tempAddr, tempData);
+
+    for (i = 0; i < 7; i++)
+    {
+        sk_send_data[i] = sk_receive_data[i];
+    }
+    usart3_send_array((uint8_t *)sk_send_data, 8);
+    sk_step = SK_HEAD_VERIFY;
+
+    clearFrame();
 }
