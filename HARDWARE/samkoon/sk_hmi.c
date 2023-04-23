@@ -7,7 +7,6 @@ static __IO uint8_t sk_receive_data[10] = {0};
 static __IO uint8_t sk_send_data[50] = {0};
 __IO uint8_t sk_coil_register[50] = {0};
 
-
 SK_STEP sk_step = SK_HEAD_VERIFY;
 static void modbus01(void);
 static void modbus03(void);
@@ -286,11 +285,19 @@ uint16_t setCoilVal(uint16_t addr, uint16_t tempData) // 设定线圈状态
 
     case 1:
         // COOL1_FLAG = tempData;
+        if (tempData == 1 && sk_coil_register[1] == 0)
+        {
+            PCout(4) = 1;
+        }
+        if (tempData == 0 && sk_coil_register[1] == 1)
+        {
+            PCout(4) = 0;
+        }
         sk_coil_register[1] = tempData; // 变频器电源开关
         break;
     case 2:
         // HEAT1_FLAG = tempData;
-        
+
         sk_coil_register[2] = tempData; // 自动开关 0手动，1自动
 
         break;
@@ -298,16 +305,24 @@ uint16_t setCoilVal(uint16_t addr, uint16_t tempData) // 设定线圈状态
         // COOL2_FLAG = tempData;
         if (tempData == 1 && sk_coil_register[3] == 0)
         {
-             should_blower_open = 1;
-        } 
-        if (tempData ==0 && sk_coil_register[3] == 1) 
+            should_blower_open = 1;
+        }
+        if (tempData == 0 && sk_coil_register[3] == 1)
         {
-             should_blower_close = 1;
+            should_blower_close = 1;
         }
         // sk_coil_register[3] = tempData; // 风机
 
         break;
     case 4:
+        if (tempData == 1 && sk_coil_register[4] == 0)
+        {
+            PCout(5) = 1;
+        }
+        if (tempData == 0 && sk_coil_register[4] == 1)
+        {
+            PCout(5) = 0;
+        }
         sk_coil_register[4] = tempData; // 净化器
 
         break;
@@ -357,80 +372,85 @@ uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)
 
 void sk_proc(void)
 {
-    switch (sk_step)
+    while (1)
     {
-    case SK_HEAD_VERIFY:
-        // if ((QUEUE_LEN(usart3_fram)) < 8)
-        // {
-        //     break;
-        // }
-        if (usart3_fram.InfBit.FramLength < 8)
+        /* code */
+
+        switch (sk_step)
         {
+        case SK_HEAD_VERIFY:
+            // if ((QUEUE_LEN(usart3_fram)) < 8)
+            // {
+            //     break;
+            // }
+            if (usart3_fram.InfBit.FramLength < 8)
+            {
+
+                break;
+            }
+
+            // for (uint8_t i = 0; i < 8; i++)
+            // {
+            //     QUEUE_OUT(usart3_fram, &sk_receive_data[i]);
+            // }
+
+            // if (sk_receive_data[0] == 1)
+            // {
+            //     sk_step = SK_CRC_VERIFY;
+            // }
+            if (usart3_fram.Data_RX_BUF[0] != 1)
+            {
+                clearFrame();
+                break;
+            }
+            memcpy((char *)sk_receive_data, &(usart3_fram.Data_RX_BUF[0]), 8);
+            sk_step = SK_CRC_VERIFY;
+            break;
+        case SK_CRC_VERIFY:;
+            uint16_t crc_data = crc16(sk_receive_data, 6);
+            if (crc_data == sk_receive_data[7] + (sk_receive_data[6] << 8))
+            {
+                sk_step = SK_CATEGORY_VERIFY;
+            }
+            else
+            {
+                clearFrame();
+                sk_step = SK_HEAD_VERIFY;
+            }
 
             break;
-        }
+        case SK_CATEGORY_VERIFY:
 
-        // for (uint8_t i = 0; i < 8; i++)
-        // {
-        //     QUEUE_OUT(usart3_fram, &sk_receive_data[i]);
-        // }
+            if (sk_receive_data[1] == 1)
+            {
+                sk_step = SK_DATA_01;
+            }
+            else if (sk_receive_data[1] == 3)
+            {
+                sk_step = SK_DATA_03;
+            }
+            else if (sk_receive_data[1] == 5)
+            {
+                sk_step = SK_DATA_05;
+            }
+            else if (sk_receive_data[1] == 6)
+            {
+                sk_step = SK_DATA_06;
+            }
 
-        // if (sk_receive_data[0] == 1)
-        // {
-        //     sk_step = SK_CRC_VERIFY;
-        // }
-        if (usart3_fram.Data_RX_BUF[0] != 1)
-        {
-            clearFrame();
+            break;
+        case SK_DATA_01:;
+            modbus01();
+            break;
+        case SK_DATA_03:
+            modbus03();
+            break;
+        case SK_DATA_05:
+            modbus05();
+            break;
+        default:
             break;
         }
-        memcpy((char *)sk_receive_data, &(usart3_fram.Data_RX_BUF[0]), 8);
-        sk_step = SK_CRC_VERIFY;
-        break;
-    case SK_CRC_VERIFY:;
-        uint16_t crc_data = crc16(sk_receive_data, 6);
-        if (crc_data == sk_receive_data[7] + (sk_receive_data[6] << 8))
-        {
-            sk_step = SK_CATEGORY_VERIFY;
-        }
-        else
-        {
-            clearFrame();
-            sk_step = SK_HEAD_VERIFY;
-        }
-
-        break;
-    case SK_CATEGORY_VERIFY:
-
-        if (sk_receive_data[1] == 1)
-        {
-            sk_step = SK_DATA_01;
-        }
-        else if (sk_receive_data[1] == 3)
-        {
-            sk_step = SK_DATA_03;
-        }
-        else if (sk_receive_data[1] == 5)
-        {
-            sk_step = SK_DATA_05;
-        }
-        else if (sk_receive_data[1] == 6)
-        {
-            sk_step = SK_DATA_06;
-        }
-
-        break;
-    case SK_DATA_01:;
-        modbus01();
-        break;
-    case SK_DATA_03:
-        modbus03();
-        break;
-    case SK_DATA_05:
-        modbus05();
-        break;
-    default:
-        break;
     }
 }
 

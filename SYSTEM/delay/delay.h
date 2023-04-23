@@ -9,10 +9,10 @@ void delay_init(void);
 
 //延时nus
 //nus为要延时的us数.		    								   
-void delay_us(u32 nus);
+// void delay_us(u32 nus);
 //延时nms
 //nms:要延时的ms数
-void delay_ms(u16 nms);
+// void delay_ms(u16 nms);
 
 #endif
 

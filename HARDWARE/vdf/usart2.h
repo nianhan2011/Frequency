@@ -5,7 +5,10 @@
 #include "common.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include "FreeRTOS.h"
 #include "delay.h"
+#include "task.h"
+
 #if defined(__CC_ARM)
 #pragma anon_unions
 #endif
@@ -32,7 +35,7 @@
 #define RCC_USART_GPIO_ClockCmd RCC_APB2PeriphClockCmd
 #define RCC_USART2_GPIO_Periph RCC_APB2Periph_GPIOA
 #define PORT_USART2_TX GPIOA
-#define  PIN_USART2_TX GPIO_Pin_2
+#define PIN_USART2_TX GPIO_Pin_2
 #define PORT_USART2_RX GPIOA
 #define PIN_USART2_RX GPIO_Pin_3
 
@@ -60,10 +63,10 @@ static void RS485_Delay(__IO uint32_t nCount) // ¼òµ¥µÄÑÓÊ±º¯Êý
 }
 
 #define RS485_RX_ENABLE                \
-    delay_ms(2);                       \
+    vTaskDelay(2);                     \
     GPIO_ResetBits(GPIOD, GPIO_Pin_2); \
-    delay_ms(2);
+    vTaskDelay(2);
 #define RS485_TX_ENABLE              \
     GPIO_SetBits(GPIOD, GPIO_Pin_2); \
-    delay_ms(2);
+    vTaskDelay(2);
 #endif

@@ -389,123 +389,133 @@ void vdf_send_proc(void)
     //    send_data[6] = crcData >> 8;
     //    send_data[7] = crcData & 0xFF;
 
-    switch (send_step)
+    while (1)
     {
-    case VDF_READ_REGISTER:
-        RS485_TX_ENABLE
-        usart2_send_array(send_data, 8);
-        RS485_RX_ENABLE
-        break;
-    case VDF_READ_BLOW:
-        check_blower_status();
-        break;
 
-    case VDF_OPEN_BLOW:
-        vdf_send_blow_open();
-        break;
-    case VDF_CLOSE_BLOW:
-        vdf_send_blow_close();
-        break;
+        switch (send_step)
+        {
+        case VDF_READ_REGISTER:
+            RS485_TX_ENABLE
+            usart2_send_array(send_data, 8);
+            RS485_RX_ENABLE
+            break;
+        case VDF_READ_BLOW:
+            check_blower_status();
+            break;
 
-    default:
-        break;
+        case VDF_OPEN_BLOW:
+            vdf_send_blow_open();
+            break;
+        case VDF_CLOSE_BLOW:
+            vdf_send_blow_close();
+            break;
+
+        default:
+            break;
+        }
+        send_step_change();
+        vTaskDelay(20); // 丢弃剩余的时间片资源
     }
-    send_step_change();
 }
 
 void vdf_receive_proc(void)
 {
-    switch (vdf_step)
+    while (1)
     {
-    case VDF_HEAD_VERIFY:
-        if (usart2_fram.InfBit.FramLength < 3)
-        {
-            break;
-        }
-        if (usart2_fram.Data_RX_BUF[0] != 1)
-        {
-            clear_usart2_frame();
-            break;
-        }
+        /* code */
 
-        if (usart2_fram.Data_RX_BUF[1] == 6)
+        switch (vdf_step)
         {
-            receive_length = 8;
-        }
-        else if (usart2_fram.Data_RX_BUF[1] == 3)
-        {
-            receive_length = usart2_fram.Data_RX_BUF[2] + 5;
-        }
-        if (usart2_fram.InfBit.FramLength < receive_length)
-        {
-            break;
-        }
-        memcpy((char *)receive_data, &(usart2_fram.Data_RX_BUF[0]), receive_length);
-        vdf_step = VDF_CRC_VERIFY;
-        break;
-
-    case VDF_CRC_VERIFY:
-        uint16_t crc_data = crc16(receive_data, receive_length - 2);
-        if (crc_data == receive_data[receive_length - 1] + (receive_data[receive_length - 2] << 8))
-        {
-            vdf_step = VDF_CATEGORY_VERIFY;
-        }
-        else
-        {
-            clear_usart2_frame();
-            vdf_step = VDF_HEAD_VERIFY;
-        }
-
-        break;
-    case VDF_CATEGORY_VERIFY:
-
-        if (receive_data[1] == 1)
-        {
-            // vdf_step = VDF_DATA_01;
-        }
-        else if (receive_data[1] == 3)
-        {
-            vdf_step = VDF_DATA_03;
-        }
-        else if (receive_data[1] == 6)
-        {
-            vdf_step = VDF_DATA_06;
-        }
-
-        break;
-    case VDF_DATA_01:;
-        break;
-
-    case VDF_DATA_03:
-
-        if (receive_length == 15)
-        {
-            memcpy((char *)v_data, (char *)&receive_data[3], 10);
-        }
-        else if (receive_length == 7)
-        {
-            if (receive_data[4] == 1)
+        case VDF_HEAD_VERIFY:
+            if (usart2_fram.InfBit.FramLength < 3)
             {
-                sk_coil_register[3] = 1;
+                break;
+            }
+            if (usart2_fram.Data_RX_BUF[0] != 1)
+            {
+                clear_usart2_frame();
+                break;
+            }
+
+            if (usart2_fram.Data_RX_BUF[1] == 6)
+            {
+                receive_length = 8;
+            }
+            else if (usart2_fram.Data_RX_BUF[1] == 3)
+            {
+                receive_length = usart2_fram.Data_RX_BUF[2] + 5;
+            }
+            if (usart2_fram.InfBit.FramLength < receive_length)
+            {
+                break;
+            }
+            memcpy((char *)receive_data, &(usart2_fram.Data_RX_BUF[0]), receive_length);
+            vdf_step = VDF_CRC_VERIFY;
+            break;
+
+        case VDF_CRC_VERIFY:
+            uint16_t crc_data = crc16(receive_data, receive_length - 2);
+            if (crc_data == receive_data[receive_length - 1] + (receive_data[receive_length - 2] << 8))
+            {
+                vdf_step = VDF_CATEGORY_VERIFY;
             }
             else
             {
-                sk_coil_register[3] = 0;
+                clear_usart2_frame();
+                vdf_step = VDF_HEAD_VERIFY;
             }
+
+            break;
+        case VDF_CATEGORY_VERIFY:
+
+            if (receive_data[1] == 1)
+            {
+                // vdf_step = VDF_DATA_01;
+            }
+            else if (receive_data[1] == 3)
+            {
+                vdf_step = VDF_DATA_03;
+            }
+            else if (receive_data[1] == 6)
+            {
+                vdf_step = VDF_DATA_06;
+            }
+
+            break;
+        case VDF_DATA_01:;
+            break;
+
+        case VDF_DATA_03:
+
+            if (receive_length == 15)
+            {
+                memcpy((char *)v_data, (char *)&receive_data[3], 10);
+            }
+            else if (receive_length == 7)
+            {
+                if (receive_data[4] == 1)
+                {
+                    sk_coil_register[3] = 1;
+                }
+                else
+                {
+                    sk_coil_register[3] = 0;
+                }
+            }
+            vdf_step = VDF_HEAD_VERIFY;
+            clear_usart2_frame();
+            // send_step_change();
+
+            break;
+        case VDF_DATA_06:
+            vdf_step = VDF_HEAD_VERIFY;
+            clear_usart2_frame();
+            // send_step_change();
+
+            break;
+
+        default:
+            break;
         }
-        vdf_step = VDF_HEAD_VERIFY;
-        clear_usart2_frame();
-        // send_step_change();
-
-        break;
-    case VDF_DATA_06:
-        vdf_step = VDF_HEAD_VERIFY;
-        clear_usart2_frame();
-        // send_step_change();
-
-        break;
-
-    default:
-        break;
     }
 }

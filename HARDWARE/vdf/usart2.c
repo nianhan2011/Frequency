@@ -85,7 +85,7 @@ static void USART_4G_NVIC_Configuration(void)
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
-}
+} 
 /**
  * @brief  初始化ESP8266用到的 USART
  * @param  无
