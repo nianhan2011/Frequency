@@ -3,9 +3,13 @@
 #include <string.h>
 #include "vdf_710.h"
 #include <stdio.h>
+#include "os_system__typedef.h"
 static __IO uint8_t sk_receive_data[10] = {0};
 static __IO uint8_t sk_send_data[50] = {0};
 __IO uint8_t sk_coil_register[50] = {0};
+__IO uint8_t sk_hold_register[50] = {0};
+
+QueueHandle_t xqueue;
 
 SK_STEP sk_step = SK_HEAD_VERIFY;
 static void modbus01(void);
@@ -159,6 +163,28 @@ uint16_t getCoilVal(uint16_t addr, uint16_t *tempData) // ȡ��Ȧ״̬ ���
     return result;
 }
 
+void open_frequery(void)
+{
+    while (1)
+    {
+        /* code */
+
+        u32 isOpen;
+        // xTaskNotifyWait(0x0, 0xFFFFFFFF, &isOpen, portMAX_DELAY);
+
+        xQueueReceive(xqueue, &isOpen, portMAX_DELAY);
+  
+        if (isOpen == 1 && sk_coil_register[1] == 0)
+        {
+            PCout(4) = 1;
+        }
+        if (isOpen == 0 && sk_coil_register[1] == 1)
+        {
+            PCout(4) = 0;
+        }
+    }
+}
+
 uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ����0��ʾ�ɹ�
 {
     int result = 0;
@@ -173,43 +199,59 @@ uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ��
     {
     case 1:
 
-        *tempData = (v_data[2] << 8) + v_data[3]; // ��ѹֵ
+        *tempData = (sk_hold_register[2] << 8) + sk_hold_register[3]; // ��ѹֵ
         break;
     case 2:
-        *tempData = (v_data[4] << 8) + v_data[5]; // ��ѹֵ
+        *tempData = (sk_hold_register[4] << 8) + sk_hold_register[5]; // ��ѹֵ
         break;
     case 3:
-        *tempData = (v_data[6]) + v_data[7]; // COOL1
+        *tempData = (sk_hold_register[6]) + sk_hold_register[7]; // COOL1
         break;
     case 4:
-        *tempData = (v_data[8] << 8) + v_data[9]; // HEAT1
+        *tempData = (sk_hold_register[8] << 8) + sk_hold_register[9]; // HEAT1
 
         break;
     case 5:
-        *tempData = 5; // COOL2
+        *tempData = (sk_hold_register[10] << 8) + sk_hold_register[11]; // HEAT1
+
+        // *tempData = 5; // COOL2
         break;
     case 6:
-        *tempData = 6; // HEAT2
+        *tempData = (sk_hold_register[12] << 8) + sk_hold_register[13]; // HEAT1
+
+        // *tempData = 6; // HEAT2
         break;
     case 7:
-        *tempData = 7; // ��ˮWATER
+        *tempData = (sk_hold_register[14] << 8) + sk_hold_register[15]; // HEAT1
+
+        // *tempData = 7; // ��ˮWATER
         break;
     case 8:
-        *tempData = 8; // HIGH
+        *tempData = (sk_hold_register[16] << 8) + sk_hold_register[17]; // HEAT1
+
+        // *tempData = 8; // HIGH
         break;
     case 9:
-        *tempData = 9; // �����¶�
+        *tempData = (sk_hold_register[18] << 8) + sk_hold_register[19]; // HEAT1
+
+        // *tempData = 9; // �����¶�
         break;
     case 10:
-        *tempData = 10; // ����1
+        *tempData = (sk_hold_register[20] << 8) + sk_hold_register[21]; // HEAT1
+
+        // *tempData = 10; // ����1
         break;
 
     case 11:
-        *tempData = 11; // ����2
+        *tempData = (sk_hold_register[22] << 8) + sk_hold_register[23]; // HEAT1
+
+        // *tempData = 11; // ����2
         break;
 
     case 12:
-        *tempData = 12; // ����3
+        *tempData = (sk_hold_register[24] << 8) + sk_hold_register[25]; // HEAT1
+
+        // *tempData = 12; // ����3
         break;
 
     case 13:
@@ -284,15 +326,21 @@ uint16_t setCoilVal(uint16_t addr, uint16_t tempData) // 设定线圈状态
     {
 
     case 1:
+        u32 isOpen = tempData;
+        // xTaskNotify(open_frequery, isOpen, eSetValueWithOverwrite);
+
+        xQueueSendToBack(xqueue, &isOpen, 0);
+
         // COOL1_FLAG = tempData;
-        if (tempData == 1 && sk_coil_register[1] == 0)
-        {
-            PCout(4) = 1;
-        }
-        if (tempData == 0 && sk_coil_register[1] == 1)
-        {
-            PCout(4) = 0;
-        }
+        // if (tempData == 1 && sk_coil_register[1] == 0)
+        // {
+        //     PCout(4) = 1;
+        // }
+        // if (tempData == 0 && sk_coil_register[1] == 1)
+        // {
+        //     PCout(4) = 0;
+        // }
+
         sk_coil_register[1] = tempData; // 变频器电源开关
         break;
     case 2:
@@ -354,6 +402,7 @@ void sk_init(void)
 {
     sk_step = SK_HEAD_VERIFY;
     usart3_init();
+    xqueue = xQueueCreate(1, sizeof(u32));
 }
 
 uint16_t crc16(uint8_t *puchMsg, uint16_t usDataLen)

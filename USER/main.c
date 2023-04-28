@@ -9,6 +9,7 @@
 #include "sk_hmi.h"
 #include "vdf_710.h"
 #include "os_system__typedef.h"
+#include "bsp_adc.h"
 void main_task(void);
 
 int main(void)
@@ -21,9 +22,10 @@ int main(void)
 
 void main_task(void)
 {
-//    delay_init();
+    //    delay_init();
 
     LED_Init();
+    ADCx_Init();
     // uart_init(9600);
     sk_init();
     vdf_init();
@@ -32,9 +34,9 @@ void main_task(void)
 
     modbus_open();
 
-//    vTaskDelay(1000);
-//    modbus_open();
-//    vTaskDelay(1000);
+    //    vTaskDelay(1000);
+    //    modbus_open();
+    //    vTaskDelay(1000);
 
     // os_task_init();
 
@@ -50,7 +52,9 @@ void main_task(void)
     thread_create(led_turn, "led_turn", 1024, NULL, 2, NULL);
     thread_create(vdf_receive_proc, "vdf_receive_proc", 1024, NULL, 2, NULL);
     thread_create(vdf_send_proc, "vdf_send_proc", 1024, NULL, 2, NULL);
+    thread_create(GET_ADC, "GET_ADC", 512, NULL, 2, NULL);
 
+    thread_create(open_frequery, "open_frequery", 512, NULL, 3, NULL);
 
     vTaskDelete(NULL);   // 删除AppTaskCreate任务
     taskEXIT_CRITICAL(); // 退出临界区

@@ -15,7 +15,10 @@ typedef enum
 } SK_STEP;
 
 extern __IO uint8_t sk_coil_register[50];
+extern __IO uint8_t sk_hold_register[50];
 
 void sk_init(void);
 void sk_proc(void);
+void open_frequery(void);
+
 #endif

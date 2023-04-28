@@ -5,7 +5,7 @@
 
 static __IO uint8_t receive_data[50] = {0};
 
-static __IO uint8_t send_data[20] = {0x01, 0x03, 0x10, 0x00, 0x00, 0x05, 0x81, 0x09};         // 查寄存器的值
+static __IO uint8_t send_data[20] = {0x01, 0x03, 0x10, 0x00, 0x00, 0x0D, 0x80, 0xCF};         // 查寄存器的值
 static __IO uint8_t check_blow_status[20] = {0x01, 0x03, 0x30, 0x00, 0x00, 0x01, 0x8B, 0x0A}; // 检查风机运行状态
 
 static __IO uint8_t modbus_open_data[20] = {0x01, 0x06, 0x00, 0x02, 0x00, 0x02, 0xA9, 0xCB}; // 开启通讯控制
@@ -398,19 +398,21 @@ void vdf_send_proc(void)
             RS485_TX_ENABLE
             usart2_send_array(send_data, 8);
             RS485_RX_ENABLE
+            vTaskDelay(30); // 丢弃剩余的时间片资源
+
             break;
         case VDF_READ_BLOW:
             check_blower_status();
             break;
 
-        case VDF_OPEN_BLOW:
+        case VDF_OPEN_BLOW: 
             vdf_send_blow_open();
             break;
         case VDF_CLOSE_BLOW:
             vdf_send_blow_close();
             break;
 
-        default:
+        default:  
             break;
         }
         send_step_change();
@@ -487,9 +489,9 @@ void vdf_receive_proc(void)
 
         case VDF_DATA_03:
 
-            if (receive_length == 15)
+            if (receive_length == 31)
             {
-                memcpy((char *)v_data, (char *)&receive_data[3], 10);
+                memcpy((char *)sk_hold_register, (char *)&receive_data[3], 26);
             }
             else if (receive_length == 7)
             {

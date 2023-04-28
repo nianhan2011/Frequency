@@ -134,7 +134,7 @@
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
-            <DriverSelection>4100</DriverSelection>
+            <DriverSelection>4096</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
@@ -336,7 +336,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon;.\SYSTEM\queue;.\HARDWARE\key;.\HARDWARE\vdf;.\FreeRTOS\include;.\FreeRTOS\port\RVDS\ARM_CM3</IncludePath>
+              <IncludePath>.\CORE;.\HARDWARE\LCD;.\HARDWARE\LED;.\STM32F10x_FWLib\inc;.\SYSTEM\delay;.\SYSTEM\sys;.\SYSTEM\usart;.\USER;.\HARDWARE\dht11;.\SYSTEM\TIMER;.\STM32F10x_FWLib\src;.\HARDWARE\Ethernet\Internet;.\HARDWARE\Ethernet\W5500;.\HARDWARE\TimBase;.\HARDWARE\GM331H_4G;.\SYSTEM\Common;.\SYSTEM\os_system;.\HARDWARE\samkoon;.\SYSTEM\queue;.\HARDWARE\key;.\HARDWARE\vdf;.\FreeRTOS\include;.\FreeRTOS\port\RVDS\ARM_CM3;.\HARDWARE\WindPresssure</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -594,6 +594,16 @@
               <FileName>usart2.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\HARDWARE\vdf\usart2.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\HARDWARE\WindPresssure\bsp_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_adc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\HARDWARE\WindPresssure\bsp_adc.h</FilePath>
             </File>
           </Files>
         </Group>
