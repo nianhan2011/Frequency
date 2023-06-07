@@ -3,6 +3,7 @@
 #include <string.h>
 #include "vdf_710.h"
 #include <stdio.h>
+#include "bsp_adc.h"
 #include "os_system__typedef.h"
 static __IO uint8_t sk_receive_data[10] = {0};
 static __IO uint8_t sk_send_data[50] = {0};
@@ -173,14 +174,14 @@ void open_frequery(void)
         // xTaskNotifyWait(0x0, 0xFFFFFFFF, &isOpen, portMAX_DELAY);
 
         xQueueReceive(xqueue, &isOpen, portMAX_DELAY);
-  
+
         if (isOpen == 1 && sk_coil_register[1] == 0)
         {
-            PCout(4) = 1;
+            PBout(1) = 1;
         }
         if (isOpen == 0 && sk_coil_register[1] == 1)
         {
-            PCout(4) = 0;
+            PBout(1) = 0;
         }
     }
 }
@@ -202,7 +203,8 @@ uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ��
         *tempData = (sk_hold_register[2] << 8) + sk_hold_register[3]; // ��ѹֵ
         break;
     case 2:
-        *tempData = (sk_hold_register[4] << 8) + sk_hold_register[5]; // ��ѹֵ
+        // *tempData = (sk_hold_register[4] << 8) + sk_hold_register[5]; // ��ѹֵ
+        *tempData = ADC_ConvertedValueLocal[0];
         break;
     case 3:
         *tempData = (sk_hold_register[6]) + sk_hold_register[7]; // COOL1
@@ -227,7 +229,9 @@ uint16_t getRegisterVal(uint16_t addr, int *tempData) // ȡ�Ĵ���ֵ ��
         // *tempData = 7; // ��ˮWATER
         break;
     case 8:
-        *tempData = (sk_hold_register[16] << 8) + sk_hold_register[17]; // HEAT1
+        // *tempData = (sk_hold_register[16] << 8) + sk_hold_register[17]; // HEAT1
+
+        *tempData = (sk_hold_register[0] << 8) + sk_hold_register[1]; // HEAT1
 
         // *tempData = 8; // HIGH
         break;
@@ -365,11 +369,11 @@ uint16_t setCoilVal(uint16_t addr, uint16_t tempData) // 设定线圈状态
     case 4:
         if (tempData == 1 && sk_coil_register[4] == 0)
         {
-            PCout(5) = 1;
+            PBout(0) = 1;
         }
         if (tempData == 0 && sk_coil_register[4] == 1)
         {
-            PCout(5) = 0;
+            PBout(0) = 0;
         }
         sk_coil_register[4] = tempData; // 净化器
 

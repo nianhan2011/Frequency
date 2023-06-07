@@ -53,7 +53,7 @@ void main_task(void)
     thread_create(vdf_receive_proc, "vdf_receive_proc", 1024, NULL, 2, NULL);
     thread_create(vdf_send_proc, "vdf_send_proc", 1024, NULL, 2, NULL);
     thread_create(GET_ADC, "GET_ADC", 512, NULL, 2, NULL);
-
+ 
     thread_create(open_frequery, "open_frequery", 512, NULL, 3, NULL);
 
     vTaskDelete(NULL);   // 删除AppTaskCreate任务
